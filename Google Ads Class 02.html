@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 02 — Understanding Google Ads</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f2044;
+    --blue: #1d4ed8;
+    --blue-light: #3b82f6;
+    --blue-pale: #eff6ff;
+    --blue-mid: #dbeafe;
+    --accent: #f59e0b;
+    --accent-pale: #fef3c7;
+    --green: #059669;
+    --red: #dc2626;
+    --red-pale: #fef2f2;
+    --text: #111827;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --bg: #f9fafb;
+    --white: #ffffff;
+    --tag-bg: #e0e7ff;
+    --tag-text: #3730a3;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--navy);
+    padding: 0 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .nav-brand { color: #fff; font-weight: 700; font-size: 15px; letter-spacing: -.2px; }
+  .nav-brand span { color: var(--accent); }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-links a {
+    color: rgba(255,255,255,.7); text-decoration: none;
+    font-size: 12px; font-weight: 500; padding: 6px 10px; border-radius: 6px;
+    transition: all .2s;
+  }
+  .nav-links a:hover { color: #fff; background: rgba(255,255,255,.1); }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #1e3a6e 60%, #163160 100%);
+    padding: 80px 24px 72px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(59,130,246,.15) 0%, transparent 60%);
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    background: rgba(245,158,11,.15); color: var(--accent);
+    font-size: 12px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 6px 16px; border-radius: 20px;
+    border: 1px solid rgba(245,158,11,.3);
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 800; color: #fff;
+    line-height: 1.15; letter-spacing: -1.5px;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero-sub {
+    color: rgba(255,255,255,.65); font-size: 17px;
+    max-width: 540px; margin: 0 auto 40px;
+  }
+  .hero-tags { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .hero-tag {
+    background: rgba(255,255,255,.1); color: rgba(255,255,255,.85);
+    font-size: 13px; padding: 6px 14px; border-radius: 20px;
+    border: 1px solid rgba(255,255,255,.15);
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+  .toc-bar {
+    background: var(--white); border-bottom: 1px solid var(--border);
+    padding: 16px 24px; position: sticky; top: 56px; z-index: 90;
+    overflow-x: auto; white-space: nowrap;
+  }
+  .toc-bar-inner { display: flex; gap: 8px; max-width: 960px; margin: 0 auto; }
+  .toc-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--bg); color: var(--text-muted);
+    font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 20px;
+    border: 1px solid var(--border); cursor: pointer; text-decoration: none;
+    transition: all .2s; white-space: nowrap;
+  }
+  .toc-pill:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .toc-num { font-weight: 700; color: var(--blue); font-size: 11px; }
+  .toc-pill:hover .toc-num { color: rgba(255,255,255,.8); }
+
+  /* ── STAGE SECTION ── */
+  .stage-section {
+    background: var(--white);
+    margin: 32px auto;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  }
+  .stage-header {
+    background: var(--navy);
+    padding: 28px 36px;
+    display: flex; align-items: center; gap: 20px;
+  }
+  .stage-num {
+    background: var(--accent);
+    color: var(--navy);
+    font-size: 13px; font-weight: 800;
+    padding: 6px 12px; border-radius: 8px;
+    letter-spacing: .5px; flex-shrink: 0;
+  }
+  .stage-header h2 {
+    color: #fff; font-size: 22px; font-weight: 700;
+    letter-spacing: -.4px;
+  }
+  .stage-body { padding: 36px; }
+
+  /* ── TYPOGRAPHY inside stage ── */
+  .stage-body h3 {
+    font-size: 17px; font-weight: 700; color: var(--navy);
+    margin: 32px 0 10px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--blue-mid);
+  }
+  .stage-body h3:first-child { margin-top: 0; }
+  .stage-body h4 {
+    font-size: 15px; font-weight: 600; color: var(--blue);
+    margin: 24px 0 8px;
+  }
+  .stage-body p { color: #374151; margin-bottom: 14px; }
+
+  /* ── CARDS GRID ── */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin: 20px 0; }
+  .card {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px;
+    border-top: 3px solid var(--blue);
+  }
+  .card-icon { font-size: 24px; margin-bottom: 10px; }
+  .card h4 { color: var(--navy); font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .card p { font-size: 13px; color: var(--text-muted); margin: 0; }
+  .card .best-for {
+    margin-top: 10px; font-size: 12px; font-weight: 600;
+    color: var(--green); background: #ecfdf5;
+    padding: 4px 8px; border-radius: 6px; display: inline-block;
+  }
+
+  /* ── TABLE ── */
+  .tbl-wrap { overflow-x: auto; margin: 20px 0; border-radius: 10px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  thead tr { background: var(--navy); }
+  thead th { color: #fff; font-weight: 600; padding: 12px 16px; text-align: left; }
+  tbody tr:nth-child(even) { background: var(--bg); }
+  tbody tr:hover { background: var(--blue-pale); }
+  tbody td { padding: 11px 16px; color: #374151; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  .tag { display: inline-block; background: var(--tag-bg); color: var(--tag-text); font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+  .tag.green { background: #d1fae5; color: #065f46; }
+  .tag.red { background: #fee2e2; color: #991b1b; }
+  .tag.yellow { background: #fef3c7; color: #92400e; }
+
+  /* ── EXAMPLE BOX ── */
+  .example-box {
+    background: var(--bg); border-left: 4px solid var(--blue);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px; margin: 16px 0;
+  }
+  .example-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--blue); margin-bottom: 8px;
+  }
+  .example-box pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--text); white-space: pre-wrap;
+    line-height: 1.6;
+  }
+  .example-box p { margin: 0; font-size: 14px; }
+
+  /* ── NOTE / WARNING ── */
+  .note {
+    background: var(--blue-pale); border: 1px solid var(--blue-mid);
+    border-radius: 10px; padding: 14px 18px; margin: 14px 0;
+    font-size: 13.5px; color: #1e40af;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .note-icon { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
+  .warning {
+    background: var(--red-pale); border: 1px solid #fecaca;
+    border-radius: 10px; padding: 14px 18px; margin: 14px 0;
+    font-size: 13.5px; color: #991b1b;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .tip {
+    background: var(--accent-pale); border: 1px solid #fde68a;
+    border-radius: 10px; padding: 14px 18px; margin: 14px 0;
+    font-size: 13.5px; color: #92400e;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+
+  /* ── FLOW ── */
+  .flow { display: flex; flex-wrap: wrap; gap: 0; align-items: center; margin: 16px 0; }
+  .flow-step {
+    background: var(--navy); color: #fff;
+    font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 8px;
+  }
+  .flow-arrow { color: var(--blue-light); font-size: 18px; font-weight: 700; padding: 0 8px; }
+
+  /* ── BULLET LIST ── */
+  .bullet-list { list-style: none; margin: 12px 0; }
+  .bullet-list li {
+    padding: 7px 0 7px 24px; position: relative;
+    font-size: 14px; color: #374151;
+    border-bottom: 1px solid var(--border);
+  }
+  .bullet-list li:last-child { border-bottom: none; }
+  .bullet-list li::before {
+    content: '→'; position: absolute; left: 0;
+    color: var(--blue); font-weight: 700;
+  }
+
+  /* ── AD MOCK ── */
+  .ad-mock {
+    background: #fff; border: 1px solid #dadce0;
+    border-radius: 8px; padding: 14px 18px; margin: 16px 0;
+    max-width: 480px;
+  }
+  .ad-mock .sponsored { font-size: 11px; color: #70757a; margin-bottom: 4px; }
+  .ad-mock .ad-url { font-size: 12px; color: #202124; margin-bottom: 2px; }
+  .ad-mock .ad-title { font-size: 18px; color: #1a0dab; font-weight: 500; margin-bottom: 4px; }
+  .ad-mock .ad-desc { font-size: 13px; color: #4d5156; }
+  .ad-mock .ad-sitelinks { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+  .ad-mock .sitelink { font-size: 13px; color: #1a0dab; cursor: pointer; }
+
+  /* ── COMPARE GRID ── */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .compare-card { border-radius: 10px; padding: 18px; }
+  .compare-card.good { background: #f0fdf4; border: 1px solid #bbf7d0; }
+  .compare-card.bad { background: var(--red-pale); border: 1px solid #fecaca; }
+  .compare-card .compare-label { font-size: 12px; font-weight: 700; margin-bottom: 10px; letter-spacing: .5px; }
+  .compare-card.good .compare-label { color: var(--green); }
+  .compare-card.bad .compare-label { color: var(--red); }
+  .compare-card pre { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; white-space: pre-wrap; line-height: 1.7; }
+
+  /* ── PSYCHOLOGY CARDS ── */
+  .psych-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin: 16px 0; }
+  .psych-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px;
+    border-top: 3px solid var(--accent);
+  }
+  .psych-card .psych-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .psych-card .psych-desc { font-size: 12.5px; color: var(--text-muted); margin-bottom: 8px; }
+  .psych-card .psych-apply { font-size: 12px; color: var(--blue); font-style: italic; }
+
+  /* ── SUMMARY TABLE ── */
+  .summary-section {
+    background: var(--navy);
+    border-radius: 16px; margin: 32px 0;
+    padding: 36px; color: #fff;
+  }
+  .summary-section h2 { font-size: 22px; font-weight: 700; margin-bottom: 24px; color: var(--accent); }
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+  .summary-card {
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 10px; padding: 16px;
+  }
+  .summary-card .s-stage { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 1px; margin-bottom: 6px; }
+  .summary-card .s-title { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  .summary-card .s-desc { font-size: 13px; color: rgba(255,255,255,.65); line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy); color: rgba(255,255,255,.5);
+    text-align: center; padding: 28px; font-size: 13px;
+    margin-top: 48px;
+  }
+  footer strong { color: var(--accent); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .stage-body { padding: 20px; }
+    .stage-header { padding: 20px; flex-direction: column; align-items: flex-start; gap: 10px; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .toc-pill { font-size: 11px; padding: 4px 10px; }
+  }
+
+  /* ── SCROLL SMOOTH ── */
+  html { scroll-behavior: smooth; }
+  .stage-section { scroll-margin-top: 112px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">Google Ads <span>Class 02</span></div>
+  <div class="nav-links">
+    <a href="#stage1">Ad Types</a>
+    <a href="#stage2">Network</a>
+    <a href="#stage3">Partners</a>
+    <a href="#stage4">Keywords</a>
+    <a href="#stage5">Quality Score</a>
+    <a href="#stage6">Landing Page</a>
+    <a href="#stage7">SEO vs Ads</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Class 02 — Study Notes</div>
+  <h1>Understanding<br><span>Google Ads</span></h1>
+  <p class="hero-sub">How Google Ads work — সম্পূর্ণ গাইড বাংলায়। Ad types থেকে শুরু করে Landing Page psychology পর্যন্ত।</p>
+  <div class="hero-tags">
+    <span class="hero-tag">📌 7 Stages</span>
+    <span class="hero-tag">💡 Real Examples</span>
+    <span class="hero-tag">📊 Comparison Tables</span>
+    <span class="hero-tag">🧠 Psychology Tips</span>
+  </div>
+</section>
+
+<!-- TOC BAR -->
+<div class="toc-bar">
+  <div class="toc-bar-inner">
+    <a href="#stage1" class="toc-pill"><span class="toc-num">01</span> Ad Types</a>
+    <a href="#stage2" class="toc-pill"><span class="toc-num">02</span> Ads Network</a>
+    <a href="#stage3" class="toc-pill"><span class="toc-num">03</span> Partner Network</a>
+    <a href="#stage4" class="toc-pill"><span class="toc-num">04</span> Keywords</a>
+    <a href="#stage5" class="toc-pill"><span class="toc-num">05</span> Quality Score</a>
+    <a href="#stage6" class="toc-pill"><span class="toc-num">06</span> Landing Page</a>
+    <a href="#stage7" class="toc-pill"><span class="toc-num">07</span> SEO vs Ads</a>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ═══════════════════ STAGE 01 ═══════════════════ -->
+<section class="stage-section" id="stage1">
+  <div class="stage-header">
+    <div class="stage-num">STAGE 01</div>
+    <h2>Different Types of Google Ads</h2>
+  </div>
+  <div class="stage-body">
+    <p>Google Ads একটি single platform হলেও এর ভেতরে <strong>৮টি আলাদা ধরনের campaign type</strong> আছে। প্রতিটি আলাদা channel-এ কাজ করে, আলাদা উদ্দেশ্যে ব্যবহার হয়। সঠিক type বেছে নেওয়াটাই একজন Google Ads expert-এর প্রথম কাজ।</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">🔍</div>
+        <h4>1. Search Ads</h4>
+        <p>Google Search Results-এ দেখা যায়। User keyword search করলে Sponsored হিসেবে উপরে আসে।</p>
+        <span class="best-for">✅ Lead Generation</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🖼️</div>
+        <h4>2. Display Ads</h4>
+        <p>News site, blog, app-এ banner হিসেবে দেখা যায়। Remarketing-এ সবচেয়ে কার্যকর।</p>
+        <span class="best-for">✅ Brand Awareness</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🛍️</div>
+        <h4>3. Shopping Ads</h4>
+        <p>Product image, price, store name সহ দেখায়। Ecommerce-এর জন্য তৈরি।</p>
+        <span class="best-for">✅ Ecommerce</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">▶️</div>
+        <h4>4. Video Ads</h4>
+        <p>YouTube ভিডিওর আগে বা মাঝখানে আসে। Skippable ও Non-skippable উভয় ধরনের।</p>
+        <span class="best-for">✅ Brand Awareness</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">✨</div>
+        <h4>5. Demand Gen</h4>
+        <p>YouTube, Gmail, Discover-এ দেখায়। Facebook Ads-এর মতো audience-based targeting।</p>
+        <span class="best-for">✅ Remarketing</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚡</div>
+        <h4>6. Performance Max</h4>
+        <p>সব Google channel একসাথে। AI নিজেই সিদ্ধান্ত নেয় কোথায় ad দেখাবে।</p>
+        <span class="best-for">✅ Scaling</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">📱</div>
+        <h4>7. App Campaign</h4>
+        <p>Mobile app install বা engagement-এর জন্য। Play Store, YouTube, Search-এ দেখায়।</p>
+        <span class="best-for">✅ App Installs</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">📍</div>
+        <h4>8. Local Campaign</h4>
+        <p>Local business-এর জন্য। Google Maps, Search, Display-এ একসাথে দেখায়।</p>
+        <span class="best-for">✅ Local Business</span>
+      </div>
+    </div>
+
+    <h3>Search Ads — বিস্তারিত উদাহরণ</h3>
+    <p>কেউ Google-এ সার্চ করলে উপরে ও নিচে যে "Sponsored" results দেখা যায়, সেগুলোই Search Ads। User নিজেই সিগন্যাল দিচ্ছে সে কিছু চাইছে — তাই conversion rate অনেক বেশি।</p>
+
+    <div class="ad-mock">
+      <div class="sponsored">Sponsored</div>
+      <div class="ad-url">🌐 www.abcacrepair.com</div>
+      <div class="ad-title">Emergency AC Repair — 24/7 Available</div>
+      <div class="ad-desc">Certified technicians · Free estimate · Same-day service guaranteed. Call now!</div>
+      <div class="ad-sitelinks">
+        <span class="sitelink">Book Online</span>
+        <span class="sitelink">Our Services</span>
+        <span class="sitelink">Reviews</span>
+        <span class="sitelink">Contact</span>
+      </div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-step">User Search করলো</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Keyword Match</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Ad Auction</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Ad Appears</div>
+    </div>
+
+    <h3>Video Ads — চার ধরনের Format</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Ad Type</th><th>দৈর্ঘ্য</th><th>Skip করা যায়?</th><th>সেরা ব্যবহার</th><th>Charge কখন?</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Skippable In-Stream</strong></td><td>যেকোনো</td><td>৫ সেকেন্ড পর ✅</td><td>Brand awareness, Course</td><td>৩০ সেকেন্ড দেখলে</td></tr>
+          <tr><td><strong>Non-Skippable</strong></td><td>১৫–২০ সেকেন্ড</td><td>না ❌</td><td>Short brand message</td><td>সবসময়</td></tr>
+          <tr><td><strong>In-Feed Video</strong></td><td>যেকোনো</td><td>প্রযোজ্য নয়</td><td>YouTube Search results</td><td>Click করলে</td></tr>
+          <tr><td><strong>Bumper Ads</strong></td><td>৬ সেকেন্ড</td><td>না ❌</td><td>Quick brand recall</td><td>প্রতি impression</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Performance Max — কখন ব্যবহার করবে?</h3>
+    <p>PMax হলো Google-এর সবচেয়ে advanced campaign। একটি campaign থেকেই সব channel-এ ads যায়।</p>
+    <div class="note"><span class="note-icon">💡</span><span><strong>Expert Tip:</strong> PMax শুরু করার আগে অন্য campaigns থেকে অন্তত ৩০–৫০টি conversion data থাকা দরকার। না হলে Google-এর AI সঠিকভাবে optimize করতে পারবে না।</span></div>
+    <div class="warning"><span>⚠️</span><span><strong>সতর্কতা:</strong> PMax-এ control অনেক কম। Google নিজেই সিদ্ধান্ত নেয়। তাই ছোট budget দিয়ে test করে তারপর scale করো।</span></div>
+
+    <h3>সব Ad Type — তুলনামূলক সারসংক্ষেপ</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Ad Type</th><th>কোথায় দেখায়</th><th>সেরা ব্যবহার</th><th>Control</th><th>Difficulty</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Search Ads</strong></td><td>Google Search</td><td>Lead Generation</td><td><span class="tag green">বেশি</span></td><td>⭐⭐⭐</td></tr>
+          <tr><td><strong>Display Ads</strong></td><td>Websites, Apps</td><td>Brand Awareness, Remarketing</td><td><span class="tag">মাঝারি</span></td><td>⭐⭐</td></tr>
+          <tr><td><strong>Shopping Ads</strong></td><td>Google Shopping</td><td>Ecommerce Sales</td><td><span class="tag">মাঝারি</span></td><td>⭐⭐⭐</td></tr>
+          <tr><td><strong>Video Ads</strong></td><td>YouTube</td><td>Awareness, Courses</td><td><span class="tag green">বেশি</span></td><td>⭐⭐⭐</td></tr>
+          <tr><td><strong>Demand Gen</strong></td><td>YouTube, Gmail, Discover</td><td>Audience-based Reach</td><td><span class="tag">মাঝারি</span></td><td>⭐⭐</td></tr>
+          <tr><td><strong>Performance Max</strong></td><td>সব Channels</td><td>Scaling</td><td><span class="tag red">কম</span></td><td>⭐⭐⭐⭐</td></tr>
+          <tr><td><strong>App Campaign</strong></td><td>Search, YouTube, Play</td><td>App Installs</td><td><span class="tag red">কম</span></td><td>⭐⭐</td></tr>
+          <tr><td><strong>Local Campaign</strong></td><td>Maps, Search</td><td>Local Business</td><td><span class="tag red">কম</span></td><td>⭐</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ STAGE 02 ═══════════════════ -->
+<section class="stage-section" id="stage2">
+  <div class="stage-header">
+    <div class="stage-num">STAGE 02</div>
+    <h2>Google Ads Network</h2>
+  </div>
+  <div class="stage-body">
+    <p>Google Ads Network বলতে বোঝায় সেইসব সমস্ত জায়গার সমষ্টি যেখানে Google তার advertisers-দের ads দেখাতে পারে। এটি Google-এর নিজস্ব properties এবং partner websites ও apps নিয়ে গঠিত।</p>
+
+    <div class="flow">
+      <div class="flow-step">Advertiser</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Google Ads Platform</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Google Network</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Users দেখে</div>
+    </div>
+
+    <h3>দুটি প্রধান Network</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Network</th><th>কোথায় Ads দেখায়</th><th>কোন Ad Type</th><th>User Mindset</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Search Network</strong></td><td>Google Search, Maps, Shopping, Search Partners</td><td>Search Ads, Shopping Ads</td><td>সক্রিয়ভাবে খুঁজছে (Intent High)</td></tr>
+          <tr><td><strong>Display Network (GDN)</strong></td><td>২০ লাখ+ websites, apps, YouTube, Gmail</td><td>Display, Video, Demand Gen</td><td>অন্য কিছু করছে (Passive)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Search Network — উদাহরণ</h3>
+    <p>"Buy laptop in Bangladesh" সার্চ করলে উপরে যে Sponsored results দেখা যায় — সেগুলো Search Network-এ চলছে।</p>
+    <div class="note"><span class="note-icon">💡</span><span>Search Ads-কে বলা হয় <strong>Intent-based Advertising</strong> — user নিজেই signal দিচ্ছে সে কিছু কিনতে বা পেতে চাইছে।</span></div>
+
+    <h3>Display Network (GDN) — উদাহরণ</h3>
+    <p>প্রথম আলো, Cricbuzz, BDNews24 — এই সাইটগুলোতে যে banner ads দেখো, সেগুলো GDN-এর মাধ্যমে চলছে।</p>
+    <div class="example-box">
+      <div class="example-label">বাস্তব উদাহরণ</div>
+      <p>তুমি Daraz-এ একটা জুতা দেখলে কিন্তু কিনলে না। পরে Prothom Alo পড়তে গেলে সেই জুতার ad দেখলে।<br><br>এটাই <strong>Display Remarketing</strong> — GDN-এর সবচেয়ে শক্তিশালী ব্যবহার।</p>
+    </div>
+    <div class="note"><span class="note-icon">💡</span><span>Display Ads-কে বলা হয় <strong>Interruption-based Advertising</strong> — user কিছু সার্চ করছে না, কিন্তু তার behaviour দেখে relevant ad দেখানো হচ্ছে।</span></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ STAGE 03 ═══════════════════ -->
+<section class="stage-section" id="stage3">
+  <div class="stage-header">
+    <div class="stage-num">STAGE 03</div>
+    <h2>Google Partner Network</h2>
+  </div>
+  <div class="stage-body">
+    <p>Google Partner Network হলো সেইসব third-party websites ও apps যারা Google-এর সাথে চুক্তি করে Google-এর ads দেখায় এবং এর বিনিময়ে revenue পায়। এটিকে বলা হয় <strong>Google AdSense Program</strong>।</p>
+
+    <h3>কীভাবে কাজ করে?</h3>
+    <div class="flow">
+      <div class="flow-step">তুমি Prothom Alo-তে গেলে</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Google তোমার profile check করে</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">Ad Auction হয়</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">সবচেয়ে relevant ad দেখায়</div>
+    </div>
+
+    <h3>Google কীভাবে সঠিক মানুষকে Ad দেখায়?</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Google Signal</th><th>কী দেখে</th><th>বাস্তব উদাহরণ</th></tr></thead>
+        <tbody>
+          <tr><td>🔍 <strong>Search History</strong></td><td>সম্প্রতি কী কী search করেছ</td><td>গতকাল "best AC under 50000" search → আজ Prothom Alo-তে AC-এর ad</td></tr>
+          <tr><td>🌐 <strong>Website Visit History</strong></td><td>কোন website visit করেছ</td><td>Daraz-এ জুতা দেখেছ → অন্য site-এ সেই জুতার Remarketing ad</td></tr>
+          <tr><td>❤️ <strong>Interest & Behaviour</strong></td><td>কোন ধরনের content বেশি দেখো</td><td>Tech reviews বেশি দেখলে → Tech product-এর ads পাবে</td></tr>
+          <tr><td>👤 <strong>Demographics</strong></td><td>বয়স, লিঙ্গ, ভাষা, অবস্থান</td><td>ঢাকায় থাকলে → ঢাকার local business-এর ads দেখবে</td></tr>
+          <tr><td>📱 <strong>Device & Time</strong></td><td>কোন device, কখন online</td><td>রাতে mobile-এ → mobile-friendly ads দেখাবে</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="example-box">
+      <div class="example-label">Complete Example</div>
+      <pre>গতকাল সার্চ করলে: "Best AC under 50000"
+      ↓
+Google এই signal store করলো
+      ↓
+আজ Prothom Alo-তে গেলে
+      ↓
+Google দেখলো তোমার AC-এ interest আছে
+      ↓
+Walton AC / Midea AC / Gree AC-এর banner দেখালো</pre>
+    </div>
+
+    <h3>Google Search Partners</h3>
+    <p>Search Campaign-এ "Include Google Search Partners" option চালু রাখলে তোমার ads শুধু Google-এ না, Google-এর partner search engines-এও দেখাবে।</p>
+    <div class="warning"><span>⚠️</span><span>Search Partners-এ সাধারণত CPL (Cost Per Lead) বেশি হয়। শুরুতে এই option বন্ধ রেখে শুধু Google-এ test করো, তারপর চালু করো।</span></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ STAGE 04 ═══════════════════ -->
+<section class="stage-section" id="stage4">
+  <div class="stage-header">
+    <div class="stage-num">STAGE 04</div>
+    <h2>Keyword Strategy</h2>
+  </div>
+  <div class="stage-body">
+    <p>Google Search Ads-এ সবকিছুর কেন্দ্রে থাকে <strong>keyword</strong>। User যা টাইপ করে, Google সেটার সাথে advertiser-এর keyword মিলিয়ে দেখে কোন ad দেখাবে। তাই keyword selection এবং keyword placement দুটোই critical।</p>
+
+    <h3>Keyword কোথায় রাখলে Ad সবচেয়ে ভালো কাজ করে?</h3>
+    <p>ধরো user search করলো: <strong>"Emergency AC Repair"</strong></p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Ad-এর অংশ</th><th>গুরুত্ব</th><th>কেন গুরুত্বপূর্ণ</th><th>উদাহরণ</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Headline 1</strong></td><td>⭐⭐⭐⭐⭐</td><td>User প্রথমেই headline পড়ে। নিজের search term দেখলে মনে হয় এটাই তার solution।</td><td>Emergency AC Repair</td></tr>
+          <tr><td><strong>Headline 2</strong></td><td>⭐⭐⭐⭐⭐</td><td>Headline 1-এর পরই চোখ যায়।</td><td>24/7 Same-Day Service</td></tr>
+          <tr><td><strong>Description</strong></td><td>⭐⭐⭐⭐</td><td>Keyword + benefit একসাথে থাকলে ভালো।</td><td>Need Emergency AC Repair? Same-day appointments available.</td></tr>
+          <tr><td><strong>Display URL Path</strong></td><td>⭐⭐⭐</td><td>URL দেখে user বোঝে landing page relevant কিনা।</td><td>www.abc.com/ac-repair/emergency</td></tr>
+          <tr><td><strong>Landing Page Title</strong></td><td>⭐⭐⭐⭐⭐</td><td>Click করার পর keyword দেখলে user নিশ্চিত হয় সঠিক জায়গায় এসেছে।</td><td>Emergency AC Repair Services in Dhaka</td></tr>
+          <tr><td><strong>Landing Page Content</strong></td><td>⭐⭐⭐⭐</td><td>Natural ভাবে keyword ও related terms থাকলে Google landing page-কে relevant বোঝে।</td><td>Same-day AC repair, 24-hour service...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Keyword Stuffing — কী করবে না</h3>
+    <div class="compare-grid">
+      <div class="compare-card bad">
+        <div class="compare-label">❌ ভুল — Keyword Stuffing</div>
+        <pre>Emergency AC Repair Emergency AC Repair
+Best Emergency AC Repair Company
+Cheap Emergency AC Repair Near Me
+Emergency AC Repair Today Same Day</pre>
+      </div>
+      <div class="compare-card good">
+        <div class="compare-label">✅ সঠিক — Natural Writing</div>
+        <pre>Emergency AC Repair — ঢাকার সেরা সার্ভিস
+২৪ ঘণ্টা অভিজ্ঞ technician, free estimate সহ।
+Same-day appointment। Call Now!</pre>
+      </div>
+    </div>
+    <div class="warning"><span>⚠️</span><span>Keyword Stuffing করলে ad awkward দেখায়, Quality Score কমে এবং Google ad disapprove করতে পারে।</span></div>
+
+    <h3>Keyword Match Types</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Match Type</th><th>কীভাবে লিখতে হয়</th><th>কোন searches-এ দেখাবে</th><th>কখন ব্যবহার করবে</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Broad Match</strong></td><td><code>AC repair</code></td><td>AC fix, air conditioner service, cooling repair সহ অনেক related searches</td><td>নতুন keyword খুঁজে পেতে, বড় audience reach করতে</td></tr>
+          <tr><td><strong>Phrase Match</strong></td><td><code>"AC repair"</code></td><td>"AC repair near me", "emergency AC repair" — phrase টা থাকলেই</td><td>মোটামুটি specific targeting করতে</td></tr>
+          <tr><td><strong>Exact Match</strong></td><td><code>[AC repair]</code></td><td>শুধুমাত্র "AC repair" বা খুব কাছের variation</td><td>সবচেয়ে specific, high-intent audience target করতে</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note"><span class="note-icon">💡</span><span><strong>Beginner Tip:</strong> শুরুতে Phrase Match দিয়ে campaign চালাও। এটা না বেশি broad, না বেশি restrictive — সঠিক balance।</span></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ STAGE 05 ═══════════════════ -->
+<section class="stage-section" id="stage5">
+  <div class="stage-header">
+    <div class="stage-num">STAGE 05</div>
+    <h2>Quality Score</h2>
+  </div>
+  <div class="stage-body">
+    <p>Quality Score হলো Google-এর একটি internal rating (<strong>1 থেকে 10</strong>) যা দিয়ে Google measure করে তোমার keyword, ad এবং landing page কতটা relevant ও useful। এই score সরাসরি তোমার <strong>ad position এবং cost</strong> প্রভাবিত করে।</p>
+
+    <div class="tip"><span>💰</span><span><strong>কেন গুরুত্বপূর্ণ:</strong> কেউ $5 bid করছে কিন্তু Quality Score ভালো — সে $3 bid করা competitor-এর চেয়ে উপরে আসতে পারে। ভালো Quality Score = কম cost-এ ভালো position।</span></div>
+
+    <h3>Quality Score-এর ৩টি Component</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Component</th><th>Google যা দেখে</th><th>Rating</th><th>Weight</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Expected CTR</strong></td><td>মানুষ তোমার ad-এ click করার কতটা সম্ভাবনা?</td><td>Below / Average / Above Average</td><td>~35%</td></tr>
+          <tr><td><strong>Ad Relevance</strong></td><td>Ad copy কি user-এর search intent-এর সাথে match করছে?</td><td>Below / Average / Above Average</td><td>~35%</td></tr>
+          <tr><td><strong>Landing Page Experience</strong></td><td>Landing page কতটা useful, relevant ও fast?</td><td>Below / Average / Above Average</td><td>~30%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Component 1 — Expected CTR</h3>
+    <p>User "Emergency AC Repair" search করেছে। দুটি ad-এর মধ্যে কোনটা বেশি click পাবে?</p>
+    <div class="compare-grid">
+      <div class="compare-card good">
+        <div class="compare-label">✅ Ad A — CTR বেশি হবে</div>
+        <pre>Emergency AC Repair
+24/7 Same-Day Service
+Call Now · Free Estimate</pre>
+      </div>
+      <div class="compare-card bad">
+        <div class="compare-label">❌ Ad B — CTR কম হবে</div>
+        <pre>Home Services Available
+Professional Technicians
+Contact Us Today</pre>
+      </div>
+    </div>
+    <p>Ad A-তে user-এর search term আছে। User ভাববে <em>"হ্যাঁ, এটাই আমি খুঁজছিলাম।"</em> — তাই click করার সম্ভাবনা অনেক বেশি।</p>
+
+    <h4>CTR বাড়ানোর উপায়:</h4>
+    <ul class="bullet-list">
+      <li>Main keyword অবশ্যই Headline 1-এ রাখো</li>
+      <li>Strong CTA ব্যবহার করো — "Call Now", "Get Free Estimate", "Book Today"</li>
+      <li>Ad Assets (Extensions) যোগ করো — Sitelinks, Callouts, Call Extension</li>
+      <li>Benefit-focused language ব্যবহার করো, feature নয়</li>
+    </ul>
+
+    <h3>Component 2 — Ad Relevance</h3>
+    <p>সবচেয়ে বড় ভুল যা beginners করে: এক Ad Group-এ অনেক ধরনের keyword মিশিয়ে ফেলে।</p>
+    <div class="compare-grid">
+      <div class="compare-card bad">
+        <div class="compare-label">❌ ভুল — এক Ad Group-এ সব</div>
+        <pre>AC Repair
+AC Installation
+Furnace Repair
+Water Heater Service
+Plumbing</pre>
+      </div>
+      <div class="compare-card good">
+        <div class="compare-label">✅ সঠিক — Tight Ad Groups</div>
+        <pre>Group 1 — AC Repair:
+Emergency AC Repair
+24 Hour AC Repair
+Same Day AC Repair
+
+Group 2 — AC Install:
+AC Installation Service
+New AC Setup</pre>
+      </div>
+    </div>
+
+    <h3>Component 3 — Landing Page Experience</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Google যা দেখে</th><th>ভালো ✅</th><th>খারাপ ❌</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Page Relevance</strong></td><td>Search "AC Repair" → Page: AC Repair Services</td><td>Search "AC Repair" → Page: Homepage</td></tr>
+          <tr><td><strong>Mobile Friendly</strong></td><td>Responsive design, সহজে পড়া যায়</td><td>Mobile-এ ভাঙা layout</td></tr>
+          <tr><td><strong>Page Speed</strong></td><td>1–3 সেকেন্ডে লোড ⭐⭐⭐⭐⭐</td><td>8–10 সেকেন্ড লাগে ⭐</td></tr>
+          <tr><td><strong>Content Quality</strong></td><td>User-এর প্রশ্নের উত্তর আছে, helpful</td><td>Thin content, শুধু contact form</td></tr>
+          <tr><td><strong>Transparency</strong></td><td>Contact info, Privacy Policy, About Us</td><td>কোনো trust signal নেই</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note"><span class="note-icon">💡</span><span>Google PageSpeed Insights দিয়ে নিজের page test করো। Page speed সবচেয়ে বেশি impact করে।</span></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ STAGE 06 ═══════════════════ -->
+<section class="stage-section" id="stage6">
+  <div class="stage-header">
+    <div class="stage-num">STAGE 06</div>
+    <h2>Landing Page — Design, Psychology & Copywriting</h2>
+  </div>
+  <div class="stage-body">
+    <p>Landing Page হলো সেই page যেখানে user ad-এ click করার পরে পৌঁছায়। এটা website-এর homepage নয় — এটা একটি specific page যার <strong>একটিমাত্র লক্ষ্য: visitor-কে একটি নির্দিষ্ট action নেওয়ানো।</strong></p>
+
+    <div class="tip"><span>🔑</span><span><strong>Expert Secret:</strong> Beginners landing page-কে website-এর মতো বানায়। Experts landing page-কে একটি focused sales conversation-এর মতো বানায়।</span></div>
+
+    <h3>AIDA Framework</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>ধাপ</th><th>নাম</th><th>লক্ষ্য</th><th>Landing Page-এ কীভাবে</th></tr></thead>
+        <tbody>
+          <tr><td><strong>A</strong></td><td>Attention</td><td>Visitor-এর মনোযোগ ধরা</td><td>Strong headline যা user-এর search intent match করে</td></tr>
+          <tr><td><strong>I</strong></td><td>Interest</td><td>আগ্রহ তৈরি করা</td><td>Problem agitation, pain points তুলে ধরা</td></tr>
+          <tr><td><strong>D</strong></td><td>Desire</td><td>কিনতে বা নিতে ইচ্ছা জাগানো</td><td>Social proof, benefits, unique value</td></tr>
+          <tr><td><strong>A</strong></td><td>Action</td><td>কাজ করানো</td><td>Clear CTA — Call Now, Book Now, Get Quote</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Complete Landing Page Structure</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Section</th><th>উদ্দেশ্য</th><th>Key Elements</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>Hero Section</strong></td><td>৩–৫ সেকেন্ডে attention ধরা</td><td>Headline, Subheadline, CTA Button, Trust Signals</td></tr>
+          <tr><td>2</td><td><strong>Problem Agitation</strong></td><td>User-এর pain point highlight করা</td><td>"Is your AC broken?" ধরনের questions</td></tr>
+          <tr><td>3</td><td><strong>Benefits</strong></td><td>Feature নয়, benefit দেখাও</td><td>Same-Day Service, Lower Bills, Peace of Mind</td></tr>
+          <tr><td>4</td><td><strong>Why Choose Us</strong></td><td>Competitors থেকে আলাদা করা</td><td>Experience, Warranty, Pricing, Availability</td></tr>
+          <tr><td>5</td><td><strong>Social Proof</strong></td><td>Trust তৈরি করা</td><td>Reviews, Testimonials, Before & After</td></tr>
+          <tr><td>6</td><td><strong>How It Works</strong></td><td>Uncertainty দূর করা</td><td>Step 1 → Step 2 → Step 3 → Result</td></tr>
+          <tr><td>7</td><td><strong>FAQ</strong></td><td>Objections remove করা</td><td>Cost, Warranty, Emergency প্রশ্নের উত্তর</td></tr>
+          <tr><td>8</td><td><strong>Final CTA</strong></td><td>যারা উপরে convert হয়নি তাদের জন্য</td><td>Ready to fix your AC? Call Now</td></tr>
+          <tr><td>9</td><td><strong>Footer</strong></td><td>Trust ও legitimacy</td><td>Contact Info, Privacy Policy, Address</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Feature vs Benefit — সবচেয়ে বড় ভুল</h3>
+    <p>মানুষ feature কেনে না — মানুষ benefit কেনে। Feature হলো "কী আছে", Benefit হলো "আমার জন্য এটা কী করবে"।</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Feature (এভাবে বলবে না)</th><th>Benefit (এভাবে বলো)</th></tr></thead>
+        <tbody>
+          <tr><td>24/7 Emergency Service</td><td>যেকোনো সময় সমস্যা হলেই আসব — রাত ৩টায়ও</td></tr>
+          <tr><td>Certified Technicians</td><td>প্রথমবারেই সঠিকভাবে ঠিক হবে, বারবার আসতে হবে না</td></tr>
+          <tr><td>Energy Efficient Repair</td><td>বিদ্যুৎ বিল কমবে, প্রতি মাসে সাশ্রয় হবে</td></tr>
+          <tr><td>1-Year Warranty</td><td>একবার ঠিক করালে এক বছর নিশ্চিন্তে থাকো</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Landing Page Psychology-র ৭টি Principle</h3>
+    <div class="psych-grid">
+      <div class="psych-card">
+        <div class="psych-title">1. Clarity</div>
+        <div class="psych-desc">User যেন ৫ সেকেন্ডে বুঝতে পারে কী offer করা হচ্ছে।</div>
+        <div class="psych-apply">→ Headline-এ directly বলো কী পাবে</div>
+      </div>
+      <div class="psych-card">
+        <div class="psych-title">2. Social Proof</div>
+        <div class="psych-desc">অন্যরা ব্যবহার করলে আমরাও করতে চাই।</div>
+        <div class="psych-apply">→ Google reviews, customer count দেখাও</div>
+      </div>
+      <div class="psych-card">
+        <div class="psych-title">3. Authority</div>
+        <div class="psych-desc">Expert-দের উপর মানুষ বেশি ভরসা করে।</div>
+        <div class="psych-apply">→ Years of experience, certifications দেখাও</div>
+      </div>
+      <div class="psych-card">
+        <div class="psych-title">4. Reciprocity</div>
+        <div class="psych-desc">কেউ কিছু দিলে আমরাও দিতে চাই।</div>
+        <div class="psych-apply">→ Free estimate, free consultation অফার করো</div>
+      </div>
+      <div class="psych-card">
+        <div class="psych-title">5. Scarcity</div>
+        <div class="psych-desc">কম থাকলে মানুষ দ্রুত সিদ্ধান্ত নেয়।</div>
+        <div class="psych-apply">→ "আজকের slots সীমিত" বলো</div>
+      </div>
+      <div class="psych-card">
+        <div class="psych-title">6. Risk Reversal</div>
+        <div class="psych-desc">Risk কমালে মানুষ সহজে হ্যাঁ বলে।</div>
+        <div class="psych-apply">→ Money-back guarantee, warranty দেখাও</div>
+      </div>
+      <div class="psych-card">
+        <div class="psych-title">7. Cognitive Ease</div>
+        <div class="psych-desc">Simple যা সহজ, মানুষ তা বেশি বিশ্বাস করে।</div>
+        <div class="psych-apply">→ Clean design, একটি primary CTA</div>
+      </div>
+    </div>
+
+    <h3>Copywriting Formula — প্রতিটি Section</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Section</th><th>Formula</th><th>উদাহরণ</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Hero Headline</strong></td><td>Desired Outcome + Availability + Pain Removal</td><td>Emergency AC Repair Services — 24/7 Available</td></tr>
+          <tr><td><strong>Subheadline</strong></td><td>How + Benefit + Risk Reduction</td><td>Certified technicians, same-day repair, upfront pricing, no hidden fees</td></tr>
+          <tr><td><strong>CTA Button</strong></td><td>Action Verb + Benefit</td><td>Get Free Estimate / Schedule Service / Call Now</td></tr>
+          <tr><td><strong>Problem Section</strong></td><td>Question + Pain + Emotion</td><td>Is your AC blowing warm air? Tired of unreliable technicians?</td></tr>
+          <tr><td><strong>Social Proof</strong></td><td>Situation → Transformation → Emotion</td><td>"AC stopped at midnight. They fixed it in 30 min." ⭐⭐⭐⭐⭐</td></tr>
+          <tr><td><strong>Final CTA</strong></td><td>Desired Outcome + Urgency + CTA</td><td>Ready To Enjoy Cool Air Again? Call Now For Same-Day Service.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ STAGE 07 ═══════════════════ -->
+<section class="stage-section" id="stage7">
+  <div class="stage-header">
+    <div class="stage-num">STAGE 07</div>
+    <h2>SEO vs Google Ads — Keyword Research</h2>
+  </div>
+  <div class="stage-body">
+    <p>অনেক beginners SEO এবং Google Ads-এর keyword research একইভাবে করে। কিন্তু দুটোর উদ্দেশ্য সম্পূর্ণ আলাদা — তাই strategy-ও আলাদা।</p>
+
+    <div class="compare-grid">
+      <div class="compare-card good">
+        <div class="compare-label">SEO-র লক্ষ্য</div>
+        <pre>Traffic + Authority
+Long-term Growth
+"কিভাবে বেশি traffic আনবো?"</pre>
+      </div>
+      <div class="compare-card" style="background:#eff6ff;border-color:#bfdbfe;">
+        <div class="compare-label" style="color:#1d4ed8;">Google Ads-এর লক্ষ্য</div>
+        <pre>Conversions + Revenue
+Immediate Results
+"কোন keyword সবচেয়ে বেশি profit আনবে?"</pre>
+      </div>
+    </div>
+
+    <h3>মূল পার্থক্য একনজরে</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>বিষয়</th><th>SEO</th><th>Google Ads</th></tr></thead>
+        <tbody>
+          <tr><td><strong>মূল লক্ষ্য</strong></td><td>Traffic + Authority + Long-term Growth</td><td>Conversions + Revenue + Immediate Results</td></tr>
+          <tr><td><strong>Time Frame</strong></td><td>৩–৬ মাস বা বেশি</td><td>Same day থেকে result</td></tr>
+          <tr><td><strong>Cost</strong></td><td>Time & content investment</td><td>প্রতিটি click-এ টাকা লাগে</td></tr>
+          <tr><td><strong>Keyword Focus</strong></td><td>Informational + Commercial + Transactional</td><td>মূলত Commercial + Transactional</td></tr>
+          <tr><td><strong>Funnel Position</strong></td><td>সব stage target করা যায়</td><td>Bottom of funnel সবচেয়ে ভালো</td></tr>
+          <tr><td><strong>Priority</strong></td><td>Traffic First</td><td>Profit First</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Search Intent — সবচেয়ে বড় পার্থক্য</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Intent Type</th><th>মানে কী</th><th>উদাহরণ</th><th>SEO?</th><th>Google Ads?</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Informational</strong></td><td>তথ্য জানতে চাইছে</td><td>"What is dental implant?"</td><td><span class="tag green">✅ খুব ভালো</span></td><td><span class="tag red">❌ Conversion কম</span></td></tr>
+          <tr><td><strong>Navigational</strong></td><td>নির্দিষ্ট site খুঁজছে</td><td>"Daraz login"</td><td><span class="tag green">✅ Brand-এর জন্য</span></td><td><span class="tag red">❌ সাধারণত না</span></td></tr>
+          <tr><td><strong>Commercial</strong></td><td>কেনার আগে research</td><td>"best AC brand in BD"</td><td><span class="tag green">✅ ভালো</span></td><td><span class="tag green">✅ ভালো</span></td></tr>
+          <tr><td><strong>Transactional</strong></td><td>এখনই কিনতে চাইছে</td><td>"buy Walton AC online"</td><td><span class="tag green">✅ ভালো</span></td><td><span class="tag green">✅✅ সেরা</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Volume নয়, Intent বেশি গুরুত্বপূর্ণ</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th></th><th>Keyword</th><th>Monthly Volume</th><th>Conversion Rate</th><th>Google Ads-এ মূল্য</th></tr></thead>
+        <tbody>
+          <tr><td>SEO Target</td><td>"What is AC repair?"</td><td>10,000</td><td>~0.5%</td><td><span class="tag red">কম — তথ্য খুঁজছে</span></td></tr>
+          <tr><td>Ads Target</td><td>"Emergency AC Repair Near Me"</td><td>500</td><td>~15–20%</td><td><span class="tag green">অনেক বেশি</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="example-box">
+      <div class="example-label">গণনা করে দেখো</div>
+      <p>500 searches × 20% conversion = <strong>100 leads</strong><br>
+      10,000 searches × 0.5% conversion = <strong>50 leads</strong><br><br>
+      কম volume keyword কিন্তু বেশি profitable! 🎯</p>
+    </div>
+
+    <h3>Real Example — Dental Clinic</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Purpose</th><th>SEO Keywords</th><th>Google Ads Keywords</th></tr></thead>
+        <tbody>
+          <tr><td>Blog/Content</td><td>What are dental implants?</td><td>Dental implants near me</td></tr>
+          <tr><td>Informational</td><td>Types of dental implants explained</td><td>Affordable dental implants Dhaka</td></tr>
+          <tr><td>Educational</td><td>Dental implant vs bridge — which is better?</td><td>Emergency dentist Dhaka open now</td></tr>
+          <tr><td>Research</td><td>How long does dental implant take?</td><td>Dental implant free consultation</td></tr>
+          <tr><td>Awareness</td><td>Benefits of getting dental implants</td><td>Best dental clinic Gulshan</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Metrics — দুই Platform-এ কী দেখবে</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>SEO Metrics</th><th>কী measure করে</th><th>Google Ads Metrics</th><th>কী measure করে</th></tr></thead>
+        <tbody>
+          <tr><td>Search Volume</td><td>মাসে কতবার search হয়</td><td>CPC</td><td>প্রতিটি click-এ কত টাকা</td></tr>
+          <tr><td>Keyword Difficulty</td><td>Rank করতে কতটা কঠিন</td><td>Conversion Rate</td><td>কতজন click করে action নেয়</td></tr>
+          <tr><td>Organic CTR</td><td>কতজন organic result-এ click করে</td><td>Cost Per Lead</td><td>একটি lead পেতে কত টাকা</td></tr>
+          <tr><td>Domain Authority</td><td>Website-এর overall strength</td><td>ROAS</td><td>প্রতি ১ টাকায় কত return</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<div class="summary-section">
+  <h2>📋 Class 02 — Complete Summary</h2>
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="s-stage">STAGE 01</div>
+      <div class="s-title">Types of Google Ads</div>
+      <div class="s-desc">৮ ধরনের ad type — প্রতিটির আলাদা channel ও purpose। সঠিক type বেছে নেওয়াই সাফল্যের প্রথম ধাপ।</div>
+    </div>
+    <div class="summary-card">
+      <div class="s-stage">STAGE 02</div>
+      <div class="s-title">Google Ads Network</div>
+      <div class="s-desc">Search Network = active searchers (Intent High)। Display Network = passive audience। দুটোর কাজ আলাদা।</div>
+    </div>
+    <div class="summary-card">
+      <div class="s-stage">STAGE 03</div>
+      <div class="s-title">Partner Network</div>
+      <div class="s-desc">Google partner sites-এ search history, interests ও demographics দেখে targeted ads দেখানো হয়।</div>
+    </div>
+    <div class="summary-card">
+      <div class="s-stage">STAGE 04</div>
+      <div class="s-title">Keyword Strategy</div>
+      <div class="s-desc">Keyword headline-এ সবচেয়ে গুরুত্বপূর্ণ। Keyword Stuffing করবে না। Match types জানা দরকার।</div>
+    </div>
+    <div class="summary-card">
+      <div class="s-stage">STAGE 05</div>
+      <div class="s-title">Quality Score</div>
+      <div class="s-desc">Expected CTR + Ad Relevance + Landing Page Experience। ভালো score = কম cost, ভালো position।</div>
+    </div>
+    <div class="summary-card">
+      <div class="s-stage">STAGE 06</div>
+      <div class="s-title">Landing Page</div>
+      <div class="s-desc">Landing page = focused sales conversation। AIDA + 7 psychology principles + clear CTA।</div>
+    </div>
+    <div class="summary-card">
+      <div class="s-stage">STAGE 07</div>
+      <div class="s-title">SEO vs Ads Keywords</div>
+      <div class="s-desc">SEO = Traffic First, informational keywords। Google Ads = Profit First, transactional keywords।</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<footer>
+  <strong>Class 02: Understanding Google Ads</strong> — Complete Study Notes<br>
+  <span style="font-size:12px;margin-top:6px;display:block;">সব content educational purpose-এর জন্য।</span>
+</footer>
+
+</body>
+</html>
