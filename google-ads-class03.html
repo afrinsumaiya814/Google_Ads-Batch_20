@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 03: Google Ads Payment Method & Access</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:       #2563EB;
+    --blue-light: #EFF6FF;
+    --blue-mid:   #BFDBFE;
+    --green:      #16A34A;
+    --green-light:#F0FDF4;
+    --orange:     #EA580C;
+    --orange-light:#FFF7ED;
+    --red:        #DC2626;
+    --red-light:  #FEF2F2;
+    --purple:     #7C3AED;
+    --purple-light:#F5F3FF;
+    --gray-50:    #F8FAFC;
+    --gray-100:   #F1F5F9;
+    --gray-200:   #E2E8F0;
+    --gray-400:   #94A3B8;
+    --gray-600:   #475569;
+    --gray-800:   #1E293B;
+    --gray-900:   #0F172A;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    line-height: 1.7;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #1E40AF 0%, #2563EB 50%, #7C3AED 100%);
+    color: white;
+    padding: 56px 40px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-inner { position: relative; max-width: 860px; margin: 0 auto; }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 999px;
+    padding: 4px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .hero p { font-size: 16px; opacity: .85; }
+  .hero-topics {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-top: 28px;
+  }
+  .hero-topics span {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px; font-weight: 500;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 860px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    margin: 48px 0 28px;
+  }
+  .section-num {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800; color: white; flex-shrink: 0;
+  }
+  .section-num.blue   { background: var(--blue); }
+  .section-num.purple { background: var(--purple); }
+  .section-header h2  { font-size: 24px; font-weight: 800; color: var(--gray-900); }
+  .section-header p   { font-size: 14px; color: var(--gray-600); margin-top: 2px; }
+
+  /* ── STAGE CARD ── */
+  .stage {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 16px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  }
+  .stage-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .stage-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .stage-head h3 { font-size: 16px; font-weight: 700; }
+  .stage-head .tag {
+    margin-left: auto; font-size: 11px; font-weight: 600;
+    padding: 2px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: .06em;
+  }
+  .stage-body { padding: 20px; }
+
+  /* ── EXAMPLE BOX ── */
+  .example-box {
+    background: var(--blue-light);
+    border: 1px solid var(--blue-mid);
+    border-left: 4px solid var(--blue);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 12px 0;
+  }
+  .example-box .label {
+    font-size: 11px; font-weight: 700; color: var(--blue);
+    text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px;
+  }
+  .example-box p { font-size: 14px; color: var(--gray-800); }
+
+  /* ── WARNING BOX ── */
+  .warn-box {
+    background: var(--red-light);
+    border: 1px solid #FECACA;
+    border-left: 4px solid var(--red);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 12px 0;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .warn-box .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .warn-box p { font-size: 14px; color: #991B1B; font-weight: 500; }
+
+  /* ── TIP BOX ── */
+  .tip-box {
+    background: var(--green-light);
+    border: 1px solid #BBF7D0;
+    border-left: 4px solid var(--green);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 12px 0;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .tip-box .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .tip-box p { font-size: 14px; color: #14532D; font-weight: 500; }
+
+  /* ── INFO BOX ── */
+  .info-box {
+    background: var(--purple-light);
+    border: 1px solid #DDD6FE;
+    border-left: 4px solid var(--purple);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 12px 0;
+  }
+  .info-box .label { font-size: 11px; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing:.08em; margin-bottom:6px; }
+  .info-box p { font-size: 14px; color: #4C1D95; }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow {
+    display: flex; flex-direction: column; align-items: flex-start;
+    gap: 0; margin: 16px 0;
+  }
+  .flow-step {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .flow-dot {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: white;
+    flex-shrink: 0;
+  }
+  .flow-arrow {
+    width: 36px; display: flex; justify-content: center;
+    color: var(--gray-400); font-size: 18px; flex-shrink: 0;
+    margin: 2px 0;
+  }
+  .flow-text { font-size: 14px; font-weight: 500; color: var(--gray-800); }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  .compare-table th {
+    background: var(--gray-900); color: white;
+    padding: 10px 14px; text-align: left; font-weight: 600;
+  }
+  .compare-table th:first-child { border-radius: 8px 0 0 0; }
+  .compare-table th:last-child  { border-radius: 0 8px 0 0; }
+  .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--gray-100); }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: var(--gray-50); }
+  .compare-table .debit  { color: var(--orange); font-weight: 600; }
+  .compare-table .credit { color: var(--blue);   font-weight: 600; }
+
+  /* ── CHECKLIST ── */
+  .checklist { list-style: none; margin: 12px 0; }
+  .checklist li {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; border-radius: 8px; font-size: 14px;
+    margin-bottom: 4px;
+  }
+  .checklist li:nth-child(odd)  { background: var(--gray-50); }
+  .checklist li .check { color: var(--green); font-size: 16px; flex-shrink: 0; }
+
+  /* ── ACCESS TABLE ── */
+  .access-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 16px 0; }
+  .access-table th {
+    background: var(--purple); color: white;
+    padding: 10px 14px; text-align: left; font-weight: 600;
+  }
+  .access-table th:first-child { border-radius: 8px 0 0 0; }
+  .access-table th:last-child  { border-radius: 0 8px 0 0; }
+  .access-table td { padding: 10px 14px; border-bottom: 1px solid var(--gray-100); font-size: 13px; }
+  .access-table tr:nth-child(even) td { background: var(--gray-50); }
+  .badge-admin  { background:#FEE2E2; color:#991B1B; padding:2px 10px; border-radius:999px; font-size:12px; font-weight:700; }
+  .badge-std    { background:#FEF9C3; color:#713F12; padding:2px 10px; border-radius:999px; font-size:12px; font-weight:700; }
+  .badge-read   { background:#DCFCE7; color:#14532D; padding:2px 10px; border-radius:999px; font-size:12px; font-weight:700; }
+  .badge-email  { background:#E0E7FF; color:#3730A3; padding:2px 10px; border-radius:999px; font-size:12px; font-weight:700; }
+
+  /* ── TAG COLORS ── */
+  .bg-blue   { background: #DBEAFE; color: var(--blue); }
+  .bg-green  { background: #DCFCE7; color: var(--green); }
+  .bg-orange { background: #FFEDD5; color: var(--orange); }
+  .bg-purple { background: #EDE9FE; color: var(--purple); }
+  .bg-red    { background: #FEE2E2; color: var(--red); }
+
+  /* ── ICON BACKGROUNDS ── */
+  .ic-blue   { background: var(--blue-light); }
+  .ic-green  { background: var(--green-light); }
+  .ic-orange { background: var(--orange-light); }
+  .ic-purple { background: var(--purple-light); }
+  .ic-red    { background: var(--red-light); }
+
+  /* ── MISC ── */
+  p { font-size: 14px; color: var(--gray-700, #374151); margin-bottom: 8px; }
+  .mt-12 { margin-top: 12px; }
+  .divider { border: none; border-top: 1px solid var(--gray-200); margin: 32px 0; }
+
+  .pro-rule {
+    background: linear-gradient(135deg, #1E293B, #334155);
+    color: white; border-radius: 14px; padding: 20px 22px; margin: 16px 0;
+  }
+  .pro-rule .label { font-size: 11px; font-weight: 700; color: #94A3B8; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .pro-rule p { font-size: 14px; color: #CBD5E1; margin: 0; }
+  .pro-rule .highlight { color: #60A5FA; font-weight: 700; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+
+  .mini-card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px; padding: 14px 16px;
+  }
+  .mini-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .mini-card ul { list-style: none; }
+  .mini-card ul li { font-size: 13px; padding: 3px 0; color: var(--gray-600); }
+  .mini-card ul li::before { content: '→ '; color: var(--blue); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Google Ads • Class 03</div>
+    <h1>Payment Method & Access Security</h1>
+    <p>Billing Setup থেকে শুরু করে Account Security পর্যন্ত — সম্পূর্ণ গাইড</p>
+    <div class="hero-topics">
+      <span>💳 Billing Setup</span>
+      <span>🔐 Access & Security</span>
+      <span>📊 Payment Flow</span>
+      <span>✅ Checklists</span>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- STEP 01: BILLING SETUP -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="section-num blue">01</div>
+    <div>
+      <h2>Billing Setup</h2>
+      <p>নতুন Google Ads Account-এ Billing Configure করার ৭টি ধাপ</p>
+    </div>
+  </div>
+
+  <!-- Stage 1: Country -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-blue">🌍</div>
+      <div>
+        <h3>Stage 1 — Country</h3>
+        <p style="font-size:13px;color:#64748B;margin:0">সবচেয়ে গুরুত্বপূর্ণ প্রথম ধাপ</p>
+      </div>
+      <span class="tag bg-red">Permanent</span>
+    </div>
+    <div class="stage-body">
+      <p>Country select করলে নিচের সবকিছু নির্ধারণ হয়ে যায়:</p>
+      <div class="two-col">
+        <div class="mini-card">
+          <h4>✅ Country নির্ধারণ করে</h4>
+          <ul>
+            <li>Available Payment Methods</li>
+            <li>Tax Rules</li>
+            <li>Supported Features</li>
+            <li>Invoice Format</li>
+          </ul>
+        </div>
+        <div class="mini-card">
+          <h4>🌐 Examples</h4>
+          <ul>
+            <li>Bangladesh</li>
+            <li>United States</li>
+            <li>United Kingdom</li>
+          </ul>
+        </div>
+      </div>
+      <div class="warn-box">
+        <span class="icon">⚠️</span>
+        <p>Country সাধারণত পরে <strong>change করা যায় না।</strong> ভুল country select করলে অনেক সময় নতুন billing setup create করতে হয়।</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 2: Time Zone -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-orange">🕐</div>
+      <div>
+        <h3>Stage 2 — Time Zone</h3>
+        <p style="font-size:13px;color:#64748B;margin:0">Budget reset ও reporting affect করে</p>
+      </div>
+      <span class="tag bg-red">Permanent</span>
+    </div>
+    <div class="stage-body">
+      <div class="example-box">
+        <div class="label">📍 Example</div>
+        <p><strong>(GMT+6) Dhaka</strong> select করলে, প্রতিদিন রাত ১২:০০ AM Dhaka time-এ নতুন দিন শুরু হয় এবং Daily Budget reset হয়।</p>
+      </div>
+      <p>Time Zone যা affect করে:</p>
+      <ul style="list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+        <li style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:4px 12px;font-size:13px;color:#9A3412;">📅 Daily Budget Reset</li>
+        <li style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:4px 12px;font-size:13px;color:#9A3412;">📊 Reports</li>
+        <li style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:4px 12px;font-size:13px;color:#9A3412;">🎯 Conversion Date</li>
+        <li style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:4px 12px;font-size:13px;color:#9A3412;">💰 Cost Calculation</li>
+      </ul>
+      <div class="warn-box mt-12">
+        <span class="icon">⚠️</span>
+        <p>Time Zone পরে <strong>change করা যায় না।</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 3: Currency -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-green">💱</div>
+      <div>
+        <h3>Stage 3 — Currency</h3>
+        <p style="font-size:13px;color:#64748B;margin:0">CPC, Invoice, ROAS সব এর উপর নির্ভরশীল</p>
+      </div>
+      <span class="tag bg-red">Permanent</span>
+    </div>
+    <div class="stage-body">
+      <div class="two-col">
+        <div class="example-box" style="margin:0">
+          <div class="label">💵 USD হলে</div>
+          <p>Campaign Spend = <strong>$100</strong><br>Invoice = <strong>$100</strong></p>
+        </div>
+        <div class="example-box" style="margin:0;background:#F0FDF4;border-color:#BBF7D0;border-left-color:#16A34A">
+          <div class="label" style="color:#16A34A">৳ BDT হলে</div>
+          <p>Campaign Spend = <strong>৳12,000</strong><br>Invoice = <strong>৳12,000</strong></p>
+        </div>
+      </div>
+      <div class="warn-box mt-12">
+        <span class="icon">⚠️</span>
+        <p>Currency-ও পরে <strong>change করা যায় না।</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 4: Account Type -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-purple">👤</div>
+      <div>
+        <h3>Stage 4 — Account Type</h3>
+        <p style="font-size:13px;color:#64748B;margin:0">Invoice-এর নাম নির্ধারণ করে</p>
+      </div>
+      <span class="tag bg-purple">2 Types</span>
+    </div>
+    <div class="stage-body">
+      <div class="two-col">
+        <div class="mini-card" style="border-left:3px solid #2563EB">
+          <h4 style="color:#2563EB">🧑 Individual</h4>
+          <p style="font-size:13px;color:#475569;margin:0">নিজের নামে account।<br><br>Example: <strong>Sumaiya Mojib</strong></p>
+        </div>
+        <div class="mini-card" style="border-left:3px solid #7C3AED">
+          <h4 style="color:#7C3AED">🏢 Organization</h4>
+          <p style="font-size:13px;color:#475569;margin:0">Business বা Company-এর নামে।<br><br>Example: <strong>ABC Digital Agency</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 5: Payments Profile -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-blue">🆔</div>
+      <div>
+        <h3>Stage 5 — Payments Profile</h3>
+        <p style="font-size:13px;color:#64748B;margin:0">তোমার Google Payments Identity</p>
+      </div>
+      <span class="tag bg-blue">Identity</span>
+    </div>
+    <div class="stage-body">
+      <div class="example-box">
+        <div class="label">Payments Profile Structure</div>
+        <p><strong>Google Ads Account</strong> → <strong>Payments Profile</strong> → Name, Address, Country, Tax Info</p>
+        <p style="margin-top:8px">Profile ID Example: <code style="background:#DBEAFE;padding:2px 8px;border-radius:4px;font-family:monospace">1234-5678-9012</code></p>
+      </div>
+      <div class="pro-rule">
+        <div class="label">⚡ Expert Trick</div>
+        <p><span class="highlight">Google Ads Admin</span> হওয়া মানেই <span class="highlight">Payments Profile Admin</span> হওয়া না।<br>
+        <span style="color:#F87171;font-weight:700">Google Ads Admin ≠ Payments Profile Admin</span><br>
+        এখানেই <strong>৯০% লোক confused</strong> হয়।</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 6: Billing Account -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-orange">🏦</div>
+      <div>
+        <h3>Stage 6 — Billing Account</h3>
+        <p style="font-size:13px;color:#64748B;margin:0">Payment collect করার container</p>
+      </div>
+      <span class="tag bg-orange">Container</span>
+    </div>
+    <div class="stage-body">
+      <div class="example-box">
+        <div class="label">📦 Billing Account এ থাকে</div>
+        <p>Payment Method · Transactions · Invoices · Charges</p>
+      </div>
+      <div class="tip-box">
+        <span class="icon">💡</span>
+        <p><strong>Agency Tip:</strong> একটা Billing Account-এর নিচে একাধিক Ad Account (Ad1, Ad2, Ad3...) রাখা যায়।</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 7: Payment Method -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-green">💳</div>
+      <div>
+        <h3>Stage 7 — Payment Method</h3>
+        <p style="font-size:13px;color:#64748B;margin:0">Card দিয়ে campaign charge হয়</p>
+      </div>
+      <span class="tag bg-green">Final Step</span>
+    </div>
+    <div class="stage-body">
+      <ul style="list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
+        <li style="background:#DCFCE7;border:1px solid #BBF7D0;border-radius:8px;padding:5px 14px;font-size:13px;color:#14532D;font-weight:600;">💳 Visa Card</li>
+        <li style="background:#DCFCE7;border:1px solid #BBF7D0;border-radius:8px;padding:5px 14px;font-size:13px;color:#14532D;font-weight:600;">💳 MasterCard</li>
+        <li style="background:#DCFCE7;border:1px solid #BBF7D0;border-radius:8px;padding:5px 14px;font-size:13px;color:#14532D;font-weight:600;">🏦 Debit Card</li>
+        <li style="background:#DCFCE7;border:1px solid #BBF7D0;border-radius:8px;padding:5px 14px;font-size:13px;color:#14532D;font-weight:600;">💰 Credit Card</li>
+      </ul>
+
+      <!-- Payment Flow -->
+      <div class="flow">
+        <div class="flow-step"><div class="flow-dot" style="background:#2563EB">1</div><span class="flow-text">User Clicks Ads</span></div>
+        <div class="flow-step"><div class="flow-arrow">↓</div></div>
+        <div class="flow-step"><div class="flow-dot" style="background:#7C3AED">2</div><span class="flow-text">Spend Generated</span></div>
+        <div class="flow-step"><div class="flow-arrow">↓</div></div>
+        <div class="flow-step"><div class="flow-dot" style="background:#EA580C">3</div><span class="flow-text">Google Records Cost</span></div>
+        <div class="flow-step"><div class="flow-arrow">↓</div></div>
+        <div class="flow-step"><div class="flow-dot" style="background:#DC2626">4</div><span class="flow-text">Billing Threshold Reached</span></div>
+        <div class="flow-step"><div class="flow-arrow">↓</div></div>
+        <div class="flow-step"><div class="flow-dot" style="background:#16A34A">5</div><span class="flow-text">Card Charged ✅ Payment Successful</span></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ── DEBIT vs CREDIT ── -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-blue">⚖️</div>
+      <div><h3>Debit Card vs Credit Card — বিস্তারিত তুলনা</h3></div>
+    </div>
+    <div class="stage-body">
+      <div class="two-col">
+        <div class="mini-card" style="border-top:3px solid #EA580C">
+          <h4 style="color:#EA580C">🏦 Debit Card Example</h4>
+          <p style="font-size:13px;color:#475569;margin-bottom:10px">Balance = $100 থেকে শুরু</p>
+          <div style="font-size:13px;color:#475569">
+            Day 1: Spend $10<br>
+            Day 2: Spend $15<br>
+            Day 3: Spend $25<br>
+            <hr style="border:none;border-top:1px dashed #E2E8F0;margin:8px 0">
+            Total Spend: <strong>$50</strong><br>
+            Remaining Balance: <strong style="color:#16A34A">$50</strong>
+          </div>
+        </div>
+        <div class="mini-card" style="border-top:3px solid #2563EB">
+          <h4 style="color:#2563EB">💳 Credit Card Example</h4>
+          <p style="font-size:13px;color:#475569;margin-bottom:10px">Credit Limit = $1,000</p>
+          <div style="font-size:13px;color:#475569">
+            Google Ads Spend: $200<br><br>
+            Available Limit: <strong style="color:#16A34A">$800</strong><br><br>
+            মাস শেষে Bank-কে $200 pay করবে।
+          </div>
+        </div>
+      </div>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>বিষয়</th>
+            <th>Debit Card</th>
+            <th>Credit Card</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>টাকা কোথা থেকে?</td><td class="debit">নিজের Bank Balance</td><td class="credit">Bank-এর Credit Limit</td></tr>
+          <tr><td>Balance না থাকলে?</td><td class="debit">Payment Failed</td><td class="credit">Limit থাকলে চলবে</td></tr>
+          <tr><td>Ads Stop হওয়ার সম্ভাবনা</td><td class="debit">বেশি</td><td class="credit">কম</td></tr>
+          <tr><td>Agency/High Budget</td><td class="debit">কম ব্যবহৃত</td><td class="credit">বেশি ব্যবহৃত</td></tr>
+          <tr><td>Recommended For</td><td class="debit">Small Budget</td><td class="credit">Professional Accounts</td></tr>
+        </tbody>
+      </table>
+
+      <div class="pro-rule">
+        <div class="label">⚡ Expert Tip</div>
+        <p>Professional advertisers সাধারণত <span class="highlight">Credit Card</span> ব্যবহার করে কারণ:<br>
+        Stable Payment → No Failed Charges → <span class="highlight">No Campaign Interruption</span> → Better Account Health</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Google কখন টাকা কাটে -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-orange">⏰</div>
+      <div><h3>Google কখন টাকা কাটে?</h3></div>
+    </div>
+    <div class="stage-body">
+      <div class="two-col">
+        <div class="mini-card" style="border-top:3px solid #7C3AED">
+          <h4 style="color:#7C3AED">A. Billing Threshold অনুযায়ী</h4>
+          <div style="font-size:13px;color:#475569;margin-top:8px">
+            Threshold $10 → Spend $10 → Charge<br><br>
+            পরের threshold $50 → Charge Again<br><br>
+            তারপর $200 → Charge Again<br><br>
+            <span style="color:#7C3AED;font-weight:600">Threshold ধীরে ধীরে বাড়তে পারে।</span>
+          </div>
+        </div>
+        <div class="mini-card" style="border-top:3px solid #EA580C">
+          <h4 style="color:#EA580C">B. Monthly Charge</h4>
+          <div style="font-size:13px;color:#475569;margin-top:8px">
+            Threshold reach না হলেও মাস শেষে charge হয়।<br><br>
+            Example: June 1–30 Spend = $37<br><br>
+            <span style="color:#EA580C;font-weight:600">June 30 তারিখে $37 charge।</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-box mt-12">
+        <div class="label">📅 Real Example — June Timeline</div>
+        <p>June 1: Campaign Started<br>
+        June 3: Spend = $10 → Card Charged<br>
+        June 10: Spend = $50 → Card Charged<br>
+        June 30: Remaining Spend = $23 → Card Charged</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="icon">💡</span>
+        <p><strong>Professional Trick:</strong> Google Ads-এর Default System হলো <strong>Automatic Payments</strong> — Ads run হয় first, তারপর cost accumulate হয়, তারপর Google charge করে। সঙ্গে সঙ্গে কাটে না।</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- STEP 02: ACCESS & SECURITY -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="section-header">
+    <div class="section-num purple">02</div>
+    <div>
+      <h2>Access & Security</h2>
+      <p>Account সুরক্ষিত রাখার সম্পূর্ণ গাইড</p>
+    </div>
+  </div>
+
+  <!-- Ecosystem -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-purple">🌐</div>
+      <div><h3>Access & Security Ecosystem</h3></div>
+    </div>
+    <div class="stage-body">
+      <div class="flow">
+        <div class="flow-step"><div class="flow-dot" style="background:#DC2626">G</div><span class="flow-text">Google Account (Gmail) — সবকিছুর Foundation</span></div>
+        <div class="flow-step"><div class="flow-arrow">↓</div></div>
+        <div class="flow-step"><div class="flow-dot" style="background:#EA580C">M</div><span class="flow-text">MCC Account (Manager Account)</span></div>
+        <div class="flow-step"><div class="flow-arrow">↓</div></div>
+        <div class="flow-step"><div class="flow-dot" style="background:#7C3AED">A</div><span class="flow-text">Google Ads Account</span></div>
+        <div class="flow-step"><div class="flow-arrow">↓</div></div>
+        <div class="flow-step"><div class="flow-dot" style="background:#2563EB">🔗</div><span class="flow-text">Linked Accounts: GA4, GTM, Search Console, Business Profile</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gmail Security -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-red">📧</div>
+      <div><h3>1. Google Account (Gmail) Security</h3></div>
+      <span class="tag bg-red">Foundation</span>
+    </div>
+    <div class="stage-body">
+      <ul class="checklist">
+        <li><span class="check">✅</span><div><strong>Recovery Email</strong> — Password ভুলে গেলে কাজে আসে</div></li>
+        <li><span class="check">✅</span><div><strong>Recovery Phone Number</strong> — Security verification-এর জন্য</div></li>
+        <li><span class="check">✅</span><div><strong>Two-Factor Authentication (2FA)</strong> — অবশ্যই enable করা উচিত</div></li>
+        <li><span class="check">✅</span><div><strong>Strong Password</strong> — Example: <code style="background:#FEE2E2;padding:2px 8px;border-radius:4px">M0jib@2026#Ads</code> (weak: 12345678)</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- User Access Levels -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-purple">👥</div>
+      <div><h3>3. Google Ads User Access Levels</h3></div>
+      <span class="tag bg-purple">Settings → Access</span>
+    </div>
+    <div class="stage-body">
+      <table class="access-table">
+        <thead>
+          <tr><th>Access Level</th><th>কী করতে পারে</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="badge-admin">Admin</span></td><td>সবকিছু control করতে পারে</td></tr>
+          <tr><td><span class="badge-std">Standard</span></td><td>Campaign manage করতে পারে</td></tr>
+          <tr><td><span class="badge-read">Read Only</span></td><td>শুধু দেখতে পারে</td></tr>
+          <tr><td><span class="badge-email">Email Only</span></td><td>Report receive করতে পারে</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Billing Access -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-orange">💰</div>
+      <div><h3>4. Billing Access — সবচেয়ে বড় সমস্যা</h3></div>
+    </div>
+    <div class="stage-body">
+      <div class="warn-box">
+        <span class="icon">⚠️</span>
+        <p><strong>Real Life Problem:</strong> অনেক সময় Google Ads Admin = YES, কিন্তু Billing Admin = NO। তখন Payments section access denied হয়।</p>
+      </div>
+      <div class="two-col mt-12">
+        <div class="mini-card" style="border-left:3px solid #7C3AED">
+          <h4 style="color:#7C3AED">Payment Profile Admin</h4>
+          <p style="font-size:13px;color:#475569;margin:0">সব payment manage করতে পারে</p>
+        </div>
+        <div class="mini-card" style="border-left:3px solid #2563EB">
+          <h4 style="color:#2563EB">Payment User</h4>
+          <p style="font-size:13px;color:#475569;margin:0">Payment method ব্যবহার করতে পারে</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Linked Accounts -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-green">🔗</div>
+      <div><h3>6. Linked Accounts</h3></div>
+    </div>
+    <div class="stage-body">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+        <div class="mini-card" style="text-align:center;border-top:2px solid #2563EB">
+          <div style="font-size:24px;margin-bottom:6px">📊</div>
+          <h4>Google Analytics 4</h4>
+          <p style="font-size:12px;color:#64748B;margin:0">Website performance track</p>
+        </div>
+        <div class="mini-card" style="text-align:center;border-top:2px solid #7C3AED">
+          <div style="font-size:24px;margin-bottom:6px">🏷️</div>
+          <h4>Google Tag Manager</h4>
+          <p style="font-size:12px;color:#64748B;margin:0">Tracking setup</p>
+        </div>
+        <div class="mini-card" style="text-align:center;border-top:2px solid #16A34A">
+          <div style="font-size:24px;margin-bottom:6px">🔍</div>
+          <h4>Search Console</h4>
+          <p style="font-size:12px;color:#64748B;margin:0">SEO data</p>
+        </div>
+        <div class="mini-card" style="text-align:center;border-top:2px solid #EA580C">
+          <div style="font-size:24px;margin-bottom:6px">📍</div>
+          <h4>Business Profile</h4>
+          <p style="font-size:12px;color:#64748B;margin:0">Local campaigns</p>
+        </div>
+        <div class="mini-card" style="text-align:center;border-top:2px solid #DC2626">
+          <div style="font-size:24px;margin-bottom:6px">🛒</div>
+          <h4>Merchant Center</h4>
+          <p style="font-size:12px;color:#64748B;margin:0">Shopping Ads</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ownership Rule -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-red">📋</div>
+      <div><h3>7. Ownership — Professional Rule</h3></div>
+      <span class="tag bg-red">Must Know</span>
+    </div>
+    <div class="stage-body">
+      <div class="two-col">
+        <div class="mini-card" style="border-left:3px solid #2563EB">
+          <h4 style="color:#2563EB">✅ Client Owns</h4>
+          <ul>
+            <li>Domain</li>
+            <li>Google Ads Account</li>
+            <li>GA4 Property</li>
+            <li>GTM Container</li>
+            <li>Merchant Center</li>
+          </ul>
+        </div>
+        <div class="mini-card" style="border-left:3px solid #7C3AED">
+          <h4 style="color:#7C3AED">🏢 Agency Owns</h4>
+          <ul>
+            <li>Manager Account (MCC)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="pro-rule mt-12">
+        <div class="label">⚡ Golden Rule</div>
+        <p>Never create important assets using <span class="highlight">your own Gmail.</span> Client should always own the assets.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Permissions Table -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-blue">🔑</div>
+      <div><h3>8. Tracking Expert হিসেবে যা লাগবে</h3></div>
+    </div>
+    <div class="stage-body">
+      <table class="access-table">
+        <thead><tr><th>Platform</th><th>Required Access</th></tr></thead>
+        <tbody>
+          <tr><td>Google Ads</td><td><span class="badge-admin">Admin</span></td></tr>
+          <tr><td>GA4</td><td><span class="badge-admin">Administrator</span></td></tr>
+          <tr><td>GTM</td><td><span class="badge-std">Publish</span></td></tr>
+          <tr><td>Website (CMS)</td><td><span class="badge-std">CMS Access</span></td></tr>
+          <tr><td>Google Business Profile</td><td><span class="badge-std">Manager</span></td></tr>
+          <tr><td>Merchant Center</td><td><span class="badge-admin">Admin</span></td></tr>
+          <tr><td>Search Console</td><td><span class="badge-read">Full Access</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Security Checklist -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-green">🛡️</div>
+      <div><h3>Security Checklist</h3></div>
+    </div>
+    <div class="stage-body">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px">
+        <div class="mini-card" style="border-top:2px solid #DC2626">
+          <h4 style="color:#DC2626">📧 Gmail</h4>
+          <ul class="checklist" style="margin:0">
+            <li style="padding:4px 0;background:transparent"><span class="check">✅</span>Recovery email</li>
+            <li style="padding:4px 0;background:transparent"><span class="check">✅</span>Recovery phone</li>
+            <li style="padding:4px 0;background:transparent"><span class="check">✅</span>2FA enabled</li>
+          </ul>
+        </div>
+        <div class="mini-card" style="border-top:2px solid #2563EB">
+          <h4 style="color:#2563EB">📢 Google Ads</h4>
+          <ul class="checklist" style="margin:0">
+            <li style="padding:4px 0;background:transparent"><span class="check">✅</span>Admin users reviewed</li>
+            <li style="padding:4px 0;background:transparent"><span class="check">✅</span>Remove old employees</li>
+            <li style="padding:4px 0;background:transparent"><span class="check">✅</span>No unknown users</li>
+          </ul>
+        </div>
+        <div class="mini-card" style="border-top:2px solid #EA580C">
+          <h4 style="color:#EA580C">💳 Billing</h4>
+          <ul class="checklist" style="margin:0">
+            <li style="padding:4px 0;background:transparent"><span class="check">✅</span>Correct payment profile</li>
+            <li style="padding:4px 0;background:transparent"><span class="check">✅</span>Backup card</li>
+            <li style="padding:4px 0;background:transparent"><span class="check">✅</span>Invoice info updated</li>
+          </ul>
+        </div>
+        <div class="mini-card" style="border-top:2px solid #7C3AED">
+          <h4 style="color:#7C3AED">📊 Tracking</h4>
+          <ul class="checklist" style="margin:0">
+            <li style="padding:4px 0;background:transparent"><span class="check">✅</span>GTM backup workspace</li>
+            <li style="padding:4px 0;background:transparent"><span class="check">✅</span>GA4 admin access</li>
+            <li style="padding:4px 0;background:transparent"><span class="check">✅</span>Export container JSON</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client Onboarding -->
+  <div class="stage">
+    <div class="stage-head">
+      <div class="stage-icon ic-blue">🤝</div>
+      <div><h3>Client Onboarding Checklist</h3></div>
+      <span class="tag bg-blue">New Client</span>
+    </div>
+    <div class="stage-body">
+      <ul class="checklist">
+        <li><span class="check">✓</span>Google Ads Admin Access</li>
+        <li><span class="check">✓</span>GA4 Admin Access</li>
+        <li><span class="check">✓</span>GTM Publish Access</li>
+        <li><span class="check">✓</span>Website Login (CMS)</li>
+        <li><span class="check">✓</span>Google Business Profile Access</li>
+        <li><span class="check">✓</span>Search Console Access</li>
+        <li><span class="check">✓</span>Merchant Center Access (Ecommerce হলে)</li>
+        <li><span class="check">✓</span>Conversion Goals Information</li>
+        <li><span class="check">✓</span>CRM Access (Offline Conversion-এর জন্য)</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
