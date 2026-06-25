@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Ads Class 04 — Auction & Objectives</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1E3A5F;
+  --accent:#2E86C1;
+  --slate:#F0F4F8;
+  --dark:#2C3E50;
+  --gray:#64748B;
+  --border:#CBD5E0;
+  --white:#fff;
+}
+body{font-family:'Inter',sans-serif;background:#F8FAFC;color:var(--dark);line-height:1.7}
+
+/* NAV */
+nav{background:var(--navy);position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.nav-inner{max-width:1000px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-brand{color:#fff;font-weight:800;font-size:15px;letter-spacing:-.3px}
+.nav-brand span{color:#7EC8E3;font-weight:400}
+.nav-links{display:flex;gap:4px}
+.nav-links a{color:#A8C4E0;font-size:13px;font-weight:500;text-decoration:none;padding:6px 12px;border-radius:6px;transition:.2s}
+.nav-links a:hover{background:rgba(255,255,255,.1);color:#fff}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1E3A5F 0%,#1a5276 60%,#154360 100%);padding:72px 24px 60px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(46,134,193,.18) 0%,transparent 60%)}
+.hero-badge{display:inline-block;background:rgba(126,200,227,.15);border:1px solid rgba(126,200,227,.3);color:#7EC8E3;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 14px;border-radius:999px;margin-bottom:20px}
+.hero h1{font-size:clamp(28px,5vw,48px);font-weight:800;color:#fff;line-height:1.15;margin-bottom:14px}
+.hero h1 em{color:#7EC8E3;font-style:normal}
+.hero p{font-size:16px;color:#A8C4E0;max-width:520px;margin:0 auto 36px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.hero-chips span{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:13px;font-weight:500;padding:6px 16px;border-radius:8px}
+
+/* LAYOUT */
+.container{max-width:1000px;margin:0 auto;padding:64px 24px 80px}
+
+/* SECTION HEAD */
+.section-head{display:flex;align-items:center;gap:16px;margin-bottom:32px}
+.section-num{width:48px;height:48px;background:var(--navy);color:#fff;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;flex-shrink:0}
+.section-head h2{font-size:22px;font-weight:800;color:var(--navy)}
+.section-head p{font-size:14px;color:var(--gray);margin-top:2px}
+
+/* METRIC CARD */
+.metric-group{margin-bottom:40px}
+.metric-group h3{font-size:13px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.metric-card{background:#fff;border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:12px;padding:20px 22px;margin-bottom:12px}
+.metric-title{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.metric-abbr{font-size:18px;font-weight:800;color:var(--navy)}
+.metric-full{font-size:14px;font-weight:500;color:var(--accent)}
+.metric-body{font-size:14px;color:var(--dark);margin-bottom:12px}
+
+/* FORMULA / EXAMPLE BOX */
+.formula-box{background:var(--slate);border-radius:8px;padding:12px 16px;font-size:14px;color:var(--dark);margin-bottom:8px}
+.formula-box .label{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.example-box{background:#EBF5FB;border:1px solid #AED6F1;border-radius:8px;padding:14px 16px;font-size:14px;color:var(--dark);margin-bottom:8px}
+.example-box .label{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.example-box p{margin:2px 0}
+
+/* EXPERT BOX */
+.expert-box{background:var(--navy);border-radius:12px;padding:20px 22px;margin:20px 0}
+.expert-box .label{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.expert-box p{font-size:14px;color:#A8C4E0;margin:4px 0}
+.expert-box strong{color:#fff}
+
+/* WARN BOX */
+.warn-box{background:#F0F4F8;border-left:4px solid var(--navy);border-radius:0 8px 8px 0;padding:14px 16px;margin:14px 0;font-size:14px;color:var(--dark)}
+.warn-box strong{color:var(--navy)}
+
+/* FLOW ROW */
+.flow-row{display:flex;gap:0;margin:16px 0;border-radius:10px;overflow:hidden}
+.flow-step{flex:1;padding:12px 10px;text-align:center;font-size:13px;font-weight:700;color:#fff;position:relative}
+.flow-step.dark{background:var(--navy)}
+.flow-step.mid{background:var(--accent)}
+.flow-step:not(:last-child)::after{content:'▶';position:absolute;right:-8px;top:50%;transform:translateY(-50%);font-size:12px;color:#fff;z-index:2}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;margin:16px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:var(--navy);color:#fff;padding:10px 14px;text-align:left;font-weight:600;font-size:13px}
+th:first-child{border-radius:8px 0 0 0}
+th:last-child{border-radius:0 8px 0 0}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--dark)}
+tr:nth-child(even) td{background:var(--slate)}
+tr:last-child td{border-bottom:none}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+@media(max-width:640px){.two-col{grid-template-columns:1fr}}
+.col-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+.col-card h4{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:10px}
+.col-card p,.col-card li{font-size:14px;color:var(--dark);margin:3px 0}
+.col-card ul{list-style:none}
+.col-card ul li::before{content:'→ ';color:var(--accent);font-weight:700}
+
+/* OBJECTIVE CARD */
+.obj-card{background:#fff;border:1px solid var(--border);border-radius:14px;margin-bottom:16px;overflow:hidden}
+.obj-head{background:var(--navy);padding:14px 20px;display:flex;align-items:center;gap:12px}
+.obj-head .num{width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
+.obj-head h3{font-size:16px;font-weight:700;color:#fff}
+.obj-head p{font-size:13px;color:#A8C4E0;margin-top:1px}
+.obj-body{padding:20px}
+
+/* AUCTION TABLE HIGHLIGHT */
+.rank-1{font-weight:700;color:var(--accent)}
+.rank-badge{display:inline-block;background:#EBF5FB;color:var(--navy);font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px}
+
+/* DIVIDER */
+.divider{border:none;border-top:1px solid var(--border);margin:48px 0}
+
+/* CHECK LIST */
+.checklist{list-style:none;margin:10px 0}
+.checklist li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--dark);padding:5px 0;border-bottom:1px solid var(--slate)}
+.checklist li:last-child{border-bottom:none}
+.checklist li .ck{color:var(--accent);font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* QUICK REF TABLE */
+.qr-abbr{font-weight:700;color:var(--navy)}
+
+/* MOBILE NAV */
+@media(max-width:640px){.nav-links{display:none}}
+
+/* SMOOTH SCROLL */
+html{scroll-behavior:smooth}
+
+/* SCROLL TOP */
+.scroll-top{position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;border:none;border-radius:50%;width:44px;height:44px;font-size:20px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:.2s;display:none;z-index:99}
+.scroll-top:hover{background:var(--accent)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">Google Ads <span>Class 04</span></div>
+    <div class="nav-links">
+      <a href="#metrics">Metrics</a>
+      <a href="#auction">Auction</a>
+      <a href="#objectives">Objectives</a>
+      <a href="#quickref">Quick Ref</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Google Ads · Class 04</div>
+  <h1>Auction System &<br><em>Campaign Objectives</em></h1>
+  <p>Metrics বোঝা থেকে শুরু করে Auction কীভাবে কাজ করে এবং সঠিক Objective বেছে নেওয়া — সম্পূর্ণ গাইড।</p>
+  <div class="hero-chips">
+    <span>📊 Metrics</span>
+    <span>🔨 Auction System</span>
+    <span>🎯 Campaign Objectives</span>
+    <span>📋 Quick Reference</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ══════════════════════════════════════ -->
+<!-- TOPIC 01: METRICS -->
+<!-- ══════════════════════════════════════ -->
+<div id="metrics">
+  <div class="section-head">
+    <div class="section-num">01</div>
+    <div>
+      <h2>Different Types of Metrics</h2>
+      <p>Campaign result বোঝার জন্য এই metrics গুলো জানা আবশ্যক</p>
+    </div>
+  </div>
+
+  <!-- TRAFFIC -->
+  <div class="metric-group">
+    <h3>🚦 Traffic Metrics</h3>
+
+    <div class="metric-card">
+      <div class="metric-title">
+        <span class="metric-abbr">CPC</span>
+        <span class="metric-full">Cost Per Click</span>
+      </div>
+      <p class="metric-body">একটা click-এর জন্য কত টাকা খরচ হচ্ছে — এটাই CPC। Budget কতটা efficiently খরচ হচ্ছে তা বোঝায়।</p>
+      <div class="formula-box"><div class="label">Formula</div>CPC = Total Cost ÷ Total Clicks</div>
+      <div class="example-box">
+        <div class="label">উদাহরণ</div>
+        <p>$100 খরচে ৫০টা click পেলে → CPC = $100 ÷ 50 = <strong>$2</strong></p>
+        <p>মানে: প্রতিটা click-এর জন্য $2 খরচ হয়েছে।</p>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-title">
+        <span class="metric-abbr">CTR</span>
+        <span class="metric-full">Click Through Rate</span>
+      </div>
+      <p class="metric-body">Ad যতজন দেখেছে তার মধ্যে কতজন actually click করেছে। CTR বেশি মানে ad টা relevant ও আকর্ষণীয়।</p>
+      <div class="formula-box"><div class="label">Formula</div>CTR = Clicks ÷ Impressions × 100</div>
+      <div class="example-box">
+        <div class="label">উদাহরণ</div>
+        <p>১,০০০ impression থেকে ৫০ click → CTR = <strong>5%</strong></p>
+        <p>Google Ads-এ সাধারণত ৩–৫% CTR ভালো ধরা হয়।</p>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-title">
+        <span class="metric-abbr">Impression</span>
+        <span class="metric-full">Ad কতবার দেখানো হয়েছে</span>
+      </div>
+      <p class="metric-body">তোমার ad search result-এ কতবার appear করেছে। Click না করলেও impression count হয়।</p>
+      <div class="example-box">
+        <div class="label">উদাহরণ</div>
+        <p>১০০ জন Google-এ search করলো এবং তোমার ad screen-এ দেখালো → Impression = <strong>100</strong></p>
+        <p>একই ব্যক্তি ৩ বার search করলে impression = 3।</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONVERSION -->
+  <div class="metric-group">
+    <h3>🎯 Conversion Metrics</h3>
+
+    <div class="metric-card">
+      <div class="metric-title">
+        <span class="metric-abbr">Conversion</span>
+        <span class="metric-full">ব্যবসার কাঙ্ক্ষিত action</span>
+      </div>
+      <p class="metric-body">User যখন তোমার চাওয়া কাজটা করে সেটাই conversion। Business-ভেদে এটা আলাদা।</p>
+      <div class="example-box">
+        <div class="label">Conversion হতে পারে</div>
+        <div class="two-col" style="margin:6px 0">
+          <div style="font-size:13px">
+            <p>📝 Form Submit</p>
+            <p>🛒 Purchase</p>
+            <p>📞 Phone Call</p>
+          </div>
+          <div style="font-size:13px">
+            <p>💬 WhatsApp Click</p>
+            <p>📅 Appointment Booking</p>
+            <p>💬 Quote Request</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-title">
+        <span class="metric-abbr">CVR</span>
+        <span class="metric-full">Conversion Rate</span>
+      </div>
+      <p class="metric-body">Click করা মানুষের মধ্যে কতজন actually conversion করেছে। CVR বেশি মানে landing page ও offer ভালো।</p>
+      <div class="formula-box"><div class="label">Formula</div>CVR = Conversions ÷ Clicks × 100</div>
+      <div class="example-box">
+        <div class="label">উদাহরণ</div>
+        <p>১০০ click থেকে ১০টা form submit → CVR = <strong>10%</strong></p>
+        <p>Real Estate বা High-ticket service-এ ২–৫% CVR-ও ভালো।</p>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-title">
+        <span class="metric-abbr">CPA</span>
+        <span class="metric-full">Cost Per Acquisition</span>
+      </div>
+      <p class="metric-body">একটা lead বা sale আনতে মোট কত টাকা খরচ হয়েছে। Business-এর profit নির্ভর করে CPA কত কম রাখা যায় তার উপর।</p>
+      <div class="formula-box"><div class="label">Formula</div>CPA = Total Cost ÷ Total Conversions</div>
+      <div class="example-box">
+        <div class="label">উদাহরণ</div>
+        <p>$100 খরচে ১০টা lead → CPA = <strong>$10 per lead</strong></p>
+        <p>প্রতি lead থেকে $50 আয় হলে, $10 CPA profitable।</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVENUE -->
+  <div class="metric-group">
+    <h3>💰 Revenue Metrics</h3>
+
+    <div class="metric-card">
+      <div class="metric-title">
+        <span class="metric-abbr">ROAS</span>
+        <span class="metric-full">Return On Ad Spend</span>
+      </div>
+      <p class="metric-body">Ecommerce-এর সবচেয়ে গুরুত্বপূর্ণ metric। $1 খরচ করলে কত revenue আসছে তা measure করে।</p>
+      <div class="formula-box"><div class="label">Formula</div>ROAS = Revenue ÷ Ad Spend</div>
+      <div class="example-box">
+        <div class="label">উদাহরণ</div>
+        <p>$100 spend → $500 revenue → ROAS = <strong>5X</strong></p>
+        <p>মানে: প্রতি $1 spend-এ $5 revenue।</p>
+        <p style="margin-top:8px;font-size:13px;color:var(--gray)">2X = break-even · 4X+ = profitable · 10X+ = excellent</p>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-title">
+        <span class="metric-abbr">ROI</span>
+        <span class="metric-full">Return On Investment</span>
+      </div>
+      <p class="metric-body">ROAS শুধু revenue দেখে, কিন্তু ROI দেখে actual profit — product cost বাদ দিয়ে।</p>
+      <div class="formula-box"><div class="label">Formula</div>ROI = (Profit ÷ Investment) × 100</div>
+      <div class="example-box">
+        <div class="label">উদাহরণ</div>
+        <p>Ad Spend $100 · Revenue $500 · Product Cost $300</p>
+        <p>Profit = $500 − $300 − $100 = $100</p>
+        <p>ROI = ($100 ÷ $100) × 100 = <strong>100%</strong> (double হয়েছে)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIDDING -->
+  <div class="metric-group">
+    <h3>💸 Bidding Terms</h3>
+
+    <div class="metric-card">
+      <div class="metric-title"><span class="metric-abbr">Max CPC</span><span class="metric-full">Maximum Cost Per Click</span></div>
+      <p class="metric-body">একটা click-এর জন্য তুমি সর্বোচ্চ কত দিতে রাজি — এর বেশি কখনো charge হবে না।</p>
+      <div class="example-box"><div class="label">উদাহরণ</div><p>Keyword: AC Repair Dhaka → Max CPC = $3 set করলে Google $3-এর বেশি charge করবে না। Actual charge সাধারণত কম।</p></div>
+    </div>
+
+    <div class="two-col">
+      <div class="col-card">
+        <h4>tCPA — Target CPA</h4>
+        <p>Google-কে বলছো প্রতিটা conversion নির্দিষ্ট budget-এর মধ্যে রাখতে।</p>
+        <div class="example-box" style="margin-top:10px"><div class="label">উদাহরণ</div><p>tCPA = $10 set করলে Google automatically bid adjust করে যাতে প্রতি lead গড়ে $10-এর মধ্যে থাকে।</p></div>
+      </div>
+      <div class="col-card">
+        <h4>tROAS — Target ROAS</h4>
+        <p>Google-কে বলছো minimum কত ROAS চাও।</p>
+        <div class="example-box" style="margin-top:10px"><div class="label">উদাহরণ</div><p>tROAS = 500% মানে $1 spend-এ কমপক্ষে $5 revenue চাও। Ecommerce-এ সাধারণত 400–600% দিয়ে শুরু।</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUALITY -->
+  <div class="metric-group">
+    <h3>⭐ Quality Metrics</h3>
+
+    <div class="metric-card">
+      <div class="metric-title"><span class="metric-abbr">QS</span><span class="metric-full">Quality Score (1–10)</span></div>
+      <p class="metric-body">Google ১ থেকে ১০ পর্যন্ত score দেয়। এই score নির্ধারণ করে তুমি কত কম খরচে ভালো position পাবে।</p>
+      <div class="example-box">
+        <div class="label">QS কীভাবে calculate হয়</div>
+        <div class="two-col" style="margin:6px 0">
+          <div style="font-size:13px"><p>✅ Expected CTR</p><p>✅ Ad Relevance</p><p>✅ Landing Page Experience</p></div>
+          <div style="font-size:13px"><p>তিনটাই ভালো হলে QS 8–10 পাবে।</p><p>QS 8+ target করাই professional practice।</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-title"><span class="metric-abbr">Ad Rank</span><span class="metric-full">Position নির্ধারক</span></div>
+      <p class="metric-body">Ad কোন position-এ দেখাবে তা Ad Rank দিয়ে ঠিক হয়। বেশি bid দিলেই উপরে আসবে না — Quality Score-ও লাগে।</p>
+      <div class="formula-box"><div class="label">Formula</div>Ad Rank = Bid × Quality Score</div>
+      <div class="example-box"><div class="label">উদাহরণ</div>
+        <p>Competitor A: $10 bid × QS 5 = Ad Rank <strong>50</strong></p>
+        <p>Competitor B: $6 bid × QS 9 = Ad Rank <strong>54</strong></p>
+        <p>→ Competitor B কম bid দিয়েও উপরে থাকবে।</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEYWORD -->
+  <div class="metric-group">
+    <h3>🔑 Keyword Terms</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Match Type</th><th>Format</th><th>কীভাবে কাজ করে</th><th>উদাহরণ</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Broad Match</strong></td><td>AC Repair</td><td>Related সব search-এ দেখাতে পারে</td><td>"AC fix dhaka", "AC servicing" — সবেই দেখাবে</td></tr>
+          <tr><td><strong>Phrase Match</strong></td><td>"AC Repair"</td><td>Phrase টা থাকতেই হবে</td><td>"AC Repair near me" দেখাবে, কিন্তু "Repair AC" নাও দেখাতে পারে</td></tr>
+          <tr><td><strong>Exact Match</strong></td><td>[AC Repair]</td><td>Exact বা খুব কাছের search</td><td>শুধু "AC Repair" বা "AC Repairs" — এতেই দেখাবে</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn-box" style="margin-top:12px"><strong>Negative Keyword:</strong> অপ্রয়োজনীয় search থেকে ad বাঁচায়। AC Repair service হলে — Free, Jobs, Training, Course, PDF — এগুলো negative keyword হিসেবে যোগ করো।</div>
+  </div>
+
+  <!-- AUDIENCE -->
+  <div class="metric-group">
+    <h3>👥 Audience Terms</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>মানে কী</th><th>উদাহরণ</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Remarketing</strong></td><td>Website visit করা মানুষদের আবার ad দেখানো</td><td>তোমার site গিয়ে চলে গেছে — তাদের আবার দেখাও</td></tr>
+          <tr><td><strong>Customer Match</strong></td><td>নিজের customer list upload করে ad দেখানো</td><td>পুরনো customers-এর email list দিয়ে নতুন offer দেখাও</td></tr>
+          <tr><td><strong>In-Market Audience</strong></td><td>বর্তমানে কিছু কিনতে আগ্রহী মানুষ</td><td>Buying New Car, Buying Laptop — এরাই in-market</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- AUCTION TERMS -->
+  <div class="metric-group">
+    <h3>📈 Impression Share (Auction Terms)</h3>
+    <div class="metric-card">
+      <div class="metric-title"><span class="metric-abbr">IS</span><span class="metric-full">Impression Share</span></div>
+      <p class="metric-body">যতবার তোমার ad দেখানো সম্ভব ছিল, তার মধ্যে কতবার actually দেখানো হয়েছে।</p>
+      <div class="formula-box"><div class="label">Formula</div>IS = Received Impressions ÷ Eligible Impressions × 100</div>
+      <div class="example-box"><div class="label">উদাহরণ</div><p>১০০০ বার search হয়েছে, তোমার ad দেখা গেছে ৬০০ বার → IS = <strong>60%</strong></p></div>
+    </div>
+    <div class="two-col">
+      <div class="col-card">
+        <h4>Lost IS (Budget)</h4>
+        <p>Budget কম থাকার কারণে impression miss।</p>
+        <p style="margin-top:8px;font-size:13px;color:var(--gray)">Daily budget $10 শেষ হলে বাকি সময় ad দেখায় না।</p>
+        <p style="margin-top:6px;font-size:13px"><strong>Solution:</strong> Budget বাড়াও।</p>
+      </div>
+      <div class="col-card">
+        <h4>Lost IS (Rank)</h4>
+        <p>Ad Rank কম হওয়ার কারণে impression miss।</p>
+        <p style="margin-top:8px;font-size:13px;color:var(--gray)">Competitor-এর ad তোমার জায়গা নিচ্ছে।</p>
+        <p style="margin-top:6px;font-size:13px"><strong>Solution:</strong> QS বাড়াও বা bid adjust করো।</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /metrics -->
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════ -->
+<!-- TOPIC 02: AUCTION -->
+<!-- ══════════════════════════════════════ -->
+<div id="auction">
+  <div class="section-head">
+    <div class="section-num">02</div>
+    <div>
+      <h2>How Google Ads Auction Works</h2>
+      <p>Highest bid ≠ Top position — এটাই Google Auction-এর সবচেয়ে বড় misconception</p>
+    </div>
+  </div>
+
+  <div class="warn-box">
+    <strong>Common Misconception:</strong> "আমি $7 bid করেছি, তাই প্রতি click-এ $7 কাটবে।" — এটা ভুল। তুমি সাধারণত bid-এর অনেক কম pay করো।
+  </div>
+
+  <h3 style="font-size:16px;font-weight:700;color:var(--navy);margin:28px 0 12px">Step 1 — Ad Rank বের করা</h3>
+  <div class="formula-box"><div class="label">Formula</div>Ad Rank = Max CPC Bid × Quality Score</div>
+  <div class="tbl-wrap" style="margin-top:12px">
+    <table>
+      <thead><tr><th>Brand</th><th>Max CPC Bid</th><th>Quality Score</th><th>Ad Rank</th><th>Position</th></tr></thead>
+      <tbody>
+        <tr><td class="rank-1">CatsEye</td><td>$6</td><td>10</td><td class="rank-1">60</td><td><span class="rank-badge">#1</span></td></tr>
+        <tr><td>Sara</td><td><strong>$7</strong> ← সবচেয়ে বেশি bid</td><td>7</td><td>49</td><td><span class="rank-badge">#2</span></td></tr>
+        <tr><td>Aarong</td><td>$4</td><td>8</td><td>32</td><td><span class="rank-badge">#3</span></td></tr>
+        <tr><td>Le Reve</td><td>$3</td><td>10</td><td>30</td><td><span class="rank-badge">#4</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="expert-box">
+    <div class="label">⚡ Key Insight</div>
+    <p><strong>Sara $7 bid করেছে — সবচেয়ে বেশি!</strong> কিন্তু CatsEye $6 bid করে Quality Score 10 রাখায় position #1 পেয়েছে।</p>
+    <p>Higher bid ≠ Better position. <strong>Quality Score-ই পার্থক্য তৈরি করে।</strong></p>
+  </div>
+
+  <h3 style="font-size:16px;font-weight:700;color:var(--navy);margin:28px 0 12px">Step 2 — Actual CPC Calculate</h3>
+  <div class="formula-box"><div class="label">Formula</div>Actual CPC = (Competitor Below Ad Rank ÷ Your Quality Score) + $0.01</div>
+
+  <div class="two-col" style="margin-top:16px">
+    <div class="col-card">
+      <h4>CatsEye (Position #1)</h4>
+      <p>নিচের competitor: Sara (Ad Rank = 49)</p>
+      <p>CatsEye QS = 10</p>
+      <div class="formula-box" style="margin-top:10px"><p>49 ÷ 10 + $0.01 = <strong>$4.91</strong></p></div>
+      <p style="font-size:13px;color:var(--gray)">$6 bid করেও মাত্র $4.91 দিচ্ছে।</p>
+    </div>
+    <div class="col-card">
+      <h4>Sara (Position #2)</h4>
+      <p>নিচের competitor: Aarong (Ad Rank = 32)</p>
+      <p>Sara QS = 7</p>
+      <div class="formula-box" style="margin-top:10px"><p>32 ÷ 7 + $0.01 = <strong>$4.58</strong></p></div>
+      <p style="font-size:13px;color:var(--gray)">$7 bid করেও মাত্র $4.58 দিচ্ছে।</p>
+    </div>
+  </div>
+  <div class="two-col">
+    <div class="col-card">
+      <h4>Aarong (Position #3)</h4>
+      <p>নিচের competitor: Le Reve (Ad Rank = 30)</p>
+      <p>Aarong QS = 8</p>
+      <div class="formula-box" style="margin-top:10px"><p>30 ÷ 8 + $0.01 = <strong>$3.76</strong></p></div>
+    </div>
+    <div class="col-card">
+      <h4>Le Reve (Position #4)</h4>
+      <p>সবচেয়ে নিচে — কোনো competitor নেই।</p>
+      <p>Google minimum threshold অনুযায়ী charge করে।</p>
+      <div class="formula-box" style="margin-top:10px"><p>Actual Cost ≈ <strong>$3.00</strong></p></div>
+    </div>
+  </div>
+
+  <h3 style="font-size:16px;font-weight:700;color:var(--navy);margin:28px 0 12px">Auction Summary</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Brand</th><th>Bid</th><th>QS</th><th>Ad Rank</th><th>Position</th><th>Actual CPC</th></tr></thead>
+      <tbody>
+        <tr><td class="rank-1">CatsEye</td><td>$6</td><td>10</td><td>60</td><td>#1</td><td class="rank-1">$4.91</td></tr>
+        <tr><td>Sara</td><td>$7</td><td>7</td><td>49</td><td>#2</td><td>$4.58</td></tr>
+        <tr><td>Aarong</td><td>$4</td><td>8</td><td>32</td><td>#3</td><td>$3.76</td></tr>
+        <tr><td>Le Reve</td><td>$3</td><td>10</td><td>30</td><td>#4</td><td>~$3.00</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="expert-box" style="margin-top:20px">
+    <div class="label">⚡ Quality Score-এর Power</div>
+    <p>যদি CatsEye-এর QS 10 এর বদলে 5 হতো:</p>
+    <p><strong>Actual CPC = 49 ÷ 5 + $0.01 = $9.81</strong> — প্রায় দ্বিগুণ!</p>
+    <p style="margin-top:10px">এ কারণেই experts শুধু bid বাড়ায় না — <strong>CTR বাড়ায়, Ad Relevance বাড়ায়, Landing Page improve করে।</strong></p>
+  </div>
+
+  <h3 style="font-size:16px;font-weight:700;color:var(--navy);margin:28px 0 12px">Auction-এর মূল শিক্ষা</h3>
+  <div class="flow-row">
+    <div class="flow-step dark">Higher Quality Score</div>
+    <div class="flow-step mid">Higher Ad Rank</div>
+    <div class="flow-step dark">Better Position</div>
+    <div class="flow-step mid">Lower Actual CPC ✓</div>
+  </div>
+
+</div><!-- /auction -->
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════ -->
+<!-- TOPIC 03: OBJECTIVES -->
+<!-- ══════════════════════════════════════ -->
+<div id="objectives">
+  <div class="section-head">
+    <div class="section-num">03</div>
+    <div>
+      <h2>Campaign Objectives</h2>
+      <p>Objective শুধু button click না — Google-কে বলছো কোন ধরনের user খুঁজতে হবে</p>
+    </div>
+  </div>
+
+  <div class="flow-row" style="margin-bottom:28px">
+    <div class="flow-step dark">Business Goal</div>
+    <div class="flow-step mid">Campaign Objective</div>
+    <div class="flow-step dark">Google Optimization</div>
+    <div class="flow-step mid">Results</div>
+  </div>
+
+  <!-- 1. Sales -->
+  <div class="obj-card">
+    <div class="obj-head">
+      <div class="num">1</div>
+      <div><h3>Sales</h3><p>সরাসরি product বা service বিক্রি করাই লক্ষ্য</p></div>
+    </div>
+    <div class="obj-body">
+      <div class="two-col">
+        <div>
+          <p class="metric-body">Google সবচেয়ে বেশি purchase করার সম্ভাবনা আছে এমন user খোঁজে।</p>
+          <div class="example-box">
+            <div class="label">উদাহরণ — Ecommerce</div>
+            <p>তুমি women's tops online বিক্রি করো।</p>
+            <p>User search: "buy womens tops online"</p>
+            <p>Goal: Purchase → Google optimize করে More ROAS।</p>
+          </div>
+        </div>
+        <div class="col-card" style="background:var(--slate)">
+          <h4>Best For</h4>
+          <ul class="checklist" style="margin:0">
+            <li><span class="ck">✓</span>Ecommerce Store</li>
+            <li><span class="ck">✓</span>Shopify / WooCommerce</li>
+            <li><span class="ck">✓</span>Fashion Brand</li>
+            <li><span class="ck">✓</span>Electronics Store</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Leads -->
+  <div class="obj-card">
+    <div class="obj-head">
+      <div class="num">2</div>
+      <div><h3>Leads</h3><p>Customer information সংগ্রহ করাই লক্ষ্য</p></div>
+    </div>
+    <div class="obj-body">
+      <div class="two-col">
+        <div>
+          <div class="example-box">
+            <div class="label">উদাহরণ — Dental Clinic</div>
+            <p>User search: "Dentist Near Me"</p>
+            <p>Ad click → Landing page → Form fill → Lead ✓</p>
+            <p style="margin-top:8px">Lead হতে পারে: Form Submit, Call, WhatsApp, Appointment।</p>
+          </div>
+          <div class="flow-row" style="margin-top:10px">
+            <div class="flow-step dark" style="font-size:11px">Search</div>
+            <div class="flow-step mid" style="font-size:11px">Click</div>
+            <div class="flow-step dark" style="font-size:11px">Landing Page</div>
+            <div class="flow-step mid" style="font-size:11px">Lead ✓</div>
+          </div>
+        </div>
+        <div class="col-card" style="background:var(--slate)">
+          <h4>Best For</h4>
+          <ul class="checklist" style="margin:0">
+            <li><span class="ck">✓</span>Dental Clinic</li>
+            <li><span class="ck">✓</span>HVAC Company</li>
+            <li><span class="ck">✓</span>Real Estate</li>
+            <li><span class="ck">✓</span>Law Firm</li>
+            <li><span class="ck">✓</span>Insurance Agency</li>
+            <li><span class="ck">✓</span>Digital Agency</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Website Traffic -->
+  <div class="obj-card">
+    <div class="obj-head">
+      <div class="num">3</div>
+      <div><h3>Website Traffic</h3><p>Website visitor বাড়ানোই লক্ষ্য</p></div>
+    </div>
+    <div class="obj-body">
+      <div class="two-col">
+        <div>
+          <div class="formula-box">
+            <p>✅ Google চিন্তা করবে: <strong>Who clicks more?</strong></p>
+            <p>❌ Google চিন্তা করবে না: Who buys more?</p>
+          </div>
+          <div class="warn-box" style="margin-top:10px">
+            <strong>Beginner Mistake:</strong> Lead campaign-এর জায়গায় Website Traffic চালালে অনেক click আসবে কিন্তু lead কম হবে।
+          </div>
+        </div>
+        <div class="col-card" style="background:var(--slate)">
+          <h4>Suitable For</h4>
+          <ul class="checklist" style="margin:0">
+            <li><span class="ck">✓</span>Blog / News Site</li>
+            <li><span class="ck">✓</span>Awareness Campaign</li>
+            <li><span class="ck">✓</span>Brand Recall</li>
+          </ul>
+          <h4 style="margin-top:12px;color:#e74c3c">Not Suitable For</h4>
+          <ul class="checklist" style="margin:0">
+            <li><span class="ck" style="color:#e74c3c">✗</span>Lead Generation</li>
+            <li><span class="ck" style="color:#e74c3c">✗</span>Ecommerce Sales</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. App Promotion -->
+  <div class="obj-card">
+    <div class="obj-head">
+      <div class="num">4</div>
+      <div><h3>App Promotion</h3><p>App install বাড়ানোই লক্ষ্য</p></div>
+    </div>
+    <div class="obj-body">
+      <div class="two-col">
+        <div class="example-box" style="margin:0">
+          <div class="label">উদাহরণ — Food Delivery App</div>
+          <p>Goal: App Install বাড়ানো।</p>
+          <p>Google optimize করবে: Install, Engagement, In-App Action।</p>
+        </div>
+        <div class="col-card" style="background:var(--slate)">
+          <h4>Best For</h4>
+          <ul class="checklist" style="margin:0">
+            <li><span class="ck">✓</span>Android App</li>
+            <li><span class="ck">✓</span>iOS App</li>
+            <li><span class="ck">✓</span>SaaS Mobile App</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Awareness -->
+  <div class="obj-card">
+    <div class="obj-head">
+      <div class="num">5</div>
+      <div><h3>Awareness and Consideration</h3><p>Brand পরিচিতি বাড়ানোই লক্ষ্য</p></div>
+    </div>
+    <div class="obj-body">
+      <div class="two-col">
+        <div>
+          <div class="example-box">
+            <div class="label">উদাহরণ — নতুন Clothing Brand</div>
+            <p>মানুষ brand চেনে না, তাই sale আশা করা যাচ্ছে না।</p>
+            <p>Goal: Reach বাড়ানো, Impressions, Video Views।</p>
+          </div>
+        </div>
+        <div class="col-card" style="background:var(--slate)">
+          <h4>Awareness Funnel</h4>
+          <div class="flow-row" style="flex-direction:column;border-radius:8px;overflow:hidden;margin:0">
+            <div class="flow-step dark" style="font-size:12px;padding:8px">See Brand</div>
+            <div class="flow-step mid" style="font-size:12px;padding:8px">Remember Brand</div>
+            <div class="flow-step dark" style="font-size:12px;padding:8px">Search Later</div>
+            <div class="flow-step mid" style="font-size:12px;padding:8px">Buy Later ✓</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Local Store -->
+  <div class="obj-card">
+    <div class="obj-head">
+      <div class="num">6</div>
+      <div><h3>Local Store Visits and Promotions</h3><p>Physical store-এ মানুষ আনাই লক্ষ্য</p></div>
+    </div>
+    <div class="obj-body">
+      <div class="example-box" style="margin-bottom:14px">
+        <div class="label">কীভাবে কাজ করে</div>
+        <p>User search: "Dentist Near Me" → Google Maps-এ Sponsored Listing → Call / Direction → Store Visit</p>
+      </div>
+      <div class="flow-row" style="margin-bottom:16px">
+        <div class="flow-step dark">Google Search</div>
+        <div class="flow-step mid">Google Maps</div>
+        <div class="flow-step dark">Direction / Call</div>
+        <div class="flow-step mid">Store Visit ✓</div>
+      </div>
+      <div class="warn-box">
+        <strong>Important:</strong> শুধু এই objective select করলেই Maps Ad চলবে না। লাগবে: Google Business Profile (verified) + Google Ads Account + Business Profile linked।
+      </div>
+      <div class="two-col" style="margin-top:14px">
+        <div class="col-card">
+          <h4>Maps-এ Ad কোথায় দেখায়</h4>
+          <p><strong>Promoted Pin:</strong> Map-এ বিশেষ pin হিসেবে।</p>
+          <p style="margin-top:6px"><strong>Sponsored Listing:</strong> Search result-এর উপরে "Sponsored" লেখা সহ।</p>
+        </div>
+        <div class="col-card">
+          <h4>Best For</h4>
+          <ul class="checklist" style="margin:0">
+            <li><span class="ck">✓</span>Restaurant</li>
+            <li><span class="ck">✓</span>Dental Clinic</li>
+            <li><span class="ck">✓</span>Gym / Salon</li>
+            <li><span class="ck">✓</span>Clothing Outlet</li>
+            <li><span class="ck">✓</span>Electronics Shop</li>
+          </ul>
+        </div>
+      </div>
+      <div class="expert-box" style="margin-top:16px">
+        <div class="label">⚡ Pro Tip</div>
+        <p>বর্তমানে অনেক expert সরাসরি <strong>"Create campaign without guidance → Performance Max"</strong> ব্যবহার করে local campaign-এর কাজ করে। কারণ Google ধীরে ধীরে local features PMax-এর মধ্যে নিয়ে এসেছে।</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Without Guidance -->
+  <div class="obj-card">
+    <div class="obj-head">
+      <div class="num">7</div>
+      <div><h3>Create Campaign Without Guidance</h3><p>Expert Mode — সম্পূর্ণ নিজের control-এ</p></div>
+    </div>
+    <div class="obj-body">
+      <div class="two-col">
+        <div class="example-box" style="margin:0">
+          <div class="label">কখন ব্যবহার করবে</div>
+          <p>যখন নিজে campaign structure ভালো বোঝো।</p>
+          <p>Specific type দরকার: Search, Display, PMax, Video।</p>
+          <p>Professional experts সাধারণত এটাই prefer করে।</p>
+        </div>
+        <div class="col-card" style="background:var(--slate)">
+          <h4>Available Campaign Types</h4>
+          <ul class="checklist" style="margin:0">
+            <li><span class="ck">→</span>Search</li>
+            <li><span class="ck">→</span>Display</li>
+            <li><span class="ck">→</span>Performance Max</li>
+            <li><span class="ck">→</span>Demand Gen</li>
+            <li><span class="ck">→</span>Video</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Objective Summary Table -->
+  <h3 style="font-size:16px;font-weight:700;color:var(--navy);margin:32px 0 12px">Objective Selection Guide</h3>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Business Type</th><th>Correct Objective</th><th>কারণ</th></tr></thead>
+      <tbody>
+        <tr><td>Ecommerce Store</td><td>Sales</td><td>সরাসরি product বিক্রি করাই লক্ষ্য</td></tr>
+        <tr><td>Fashion Brand</td><td>Sales</td><td>Online purchase চাই</td></tr>
+        <tr><td>Dental Clinic</td><td>Leads</td><td>Appointment বা call দরকার</td></tr>
+        <tr><td>HVAC Company</td><td>Leads</td><td>Quote request বা call দরকার</td></tr>
+        <tr><td>Real Estate</td><td>Leads</td><td>Form fill বা call দরকার</td></tr>
+        <tr><td>Law Firm</td><td>Leads</td><td>Consultation booking দরকার</td></tr>
+        <tr><td>Blog Website</td><td>Website Traffic</td><td>Reader চাই, buyer না</td></tr>
+        <tr><td>Mobile App</td><td>App Promotion</td><td>Install বাড়াতে চাই</td></tr>
+        <tr><td>New Brand</td><td>Awareness</td><td>মানুষকে চেনাতে চাই</td></tr>
+        <tr><td>Restaurant</td><td>Local Store Visits</td><td>Physical visit দরকার</td></tr>
+        <tr><td>Gym</td><td>Local Store Visits</td><td>Physical visit দরকার</td></tr>
+        <tr><td>Clothing Outlet</td><td>Local Store Visits</td><td>Physical store-এ আনতে চাই</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /objectives -->
+
+<hr class="divider">
+
+<!-- ══════════════════════════════════════ -->
+<!-- QUICK REFERENCE -->
+<!-- ══════════════════════════════════════ -->
+<div id="quickref">
+  <div class="section-head">
+    <div class="section-num" style="font-size:16px">📋</div>
+    <div>
+      <h2>Quick Reference — Must Know Terms</h2>
+      <p>Google Ads Expert হিসেবে এই ১৮টা term মুখস্থ থাকতে হবে</p>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Term</th><th>Full Form</th><th>সহজ মানে</th></tr></thead>
+      <tbody>
+        <tr><td class="qr-abbr">CPC</td><td>Cost Per Click</td><td>প্রতি click-এ কত খরচ</td></tr>
+        <tr><td class="qr-abbr">CTR</td><td>Click Through Rate</td><td>দেখেছে তার মধ্যে কতজন click করেছে</td></tr>
+        <tr><td class="qr-abbr">CPM</td><td>Cost Per 1000 Impressions</td><td>১০০০ বার দেখানোর খরচ</td></tr>
+        <tr><td class="qr-abbr">CPA</td><td>Cost Per Acquisition</td><td>একটা lead/sale-এ কত খরচ</td></tr>
+        <tr><td class="qr-abbr">CVR</td><td>Conversion Rate</td><td>click থেকে কতজন conversion করেছে</td></tr>
+        <tr><td class="qr-abbr">ROAS</td><td>Return On Ad Spend</td><td>$1 spend-এ কত revenue</td></tr>
+        <tr><td class="qr-abbr">ROI</td><td>Return On Investment</td><td>actual profit হিসাব</td></tr>
+        <tr><td class="qr-abbr">QS</td><td>Quality Score</td><td>ad-এর quality (1–10)</td></tr>
+        <tr><td class="qr-abbr">IS</td><td>Impression Share</td><td>সম্ভাব্য impression-এর মধ্যে কতটা পেলে</td></tr>
+        <tr><td class="qr-abbr">tCPA</td><td>Target CPA</td><td>Google-কে দেওয়া CPA target</td></tr>
+        <tr><td class="qr-abbr">tROAS</td><td>Target ROAS</td><td>Google-কে দেওয়া ROAS target</td></tr>
+        <tr><td class="qr-abbr">KW</td><td>Keyword</td><td>যে search word-এ ad দেখাবে</td></tr>
+        <tr><td class="qr-abbr">CTA</td><td>Call To Action</td><td>user-কে action নিতে বলা</td></tr>
+        <tr><td class="qr-abbr">LP</td><td>Landing Page</td><td>ad click করলে যে page আসে</td></tr>
+        <tr><td class="qr-abbr">RSA</td><td>Responsive Search Ad</td><td>Google নিজে best ad combination বাছে</td></tr>
+        <tr><td class="qr-abbr">PMax</td><td>Performance Max</td><td>সব channel-এ একসাথে চলে</td></tr>
+        <tr><td class="qr-abbr">GTM</td><td>Google Tag Manager</td><td>tracking code manage করার tool</td></tr>
+        <tr><td class="qr-abbr">GA4</td><td>Google Analytics 4</td><td>website data analysis tool</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="text-align:center;margin-top:60px;padding-top:24px;border-top:1px solid var(--border)">
+  <p style="font-size:13px;color:var(--gray)">Google Ads Class 04 — Complete Notes</p>
+</div>
+
+</div><!-- /container -->
+
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('scrollTop').style.display = window.scrollY > 400 ? 'block' : 'none';
+});
+</script>
+</body>
+</html>
